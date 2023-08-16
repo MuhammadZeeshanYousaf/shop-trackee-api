@@ -47,3 +47,7 @@ group :development do
   # gem "spring"
 end
 
+# My App Gems
+
+gem 'devise-api', github: 'nejdetkadir/devise-api', branch: 'main'
+
