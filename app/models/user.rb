@@ -5,6 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :api
 
   belongs_to :role
+  has_one :business, dependent: :destroy
 
   delegate :admin?, :seller?, :customer?, to: :role, prefix: true
 
