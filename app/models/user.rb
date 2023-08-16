@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
   belongs_to :role
 
-  delegate :admin?, :member?, :customer?, to: :role, prefix: true
+  delegate :admin?, :seller?, :customer?, to: :role, prefix: true
 
 
 end

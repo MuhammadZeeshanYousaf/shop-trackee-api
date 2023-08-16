@@ -2,8 +2,8 @@ class Role < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   enum :name, {
     admin: 'admin',
+    seller: 'seller',
     customer: 'customer',
-    member: 'member'
   }
 
   has_many :users
