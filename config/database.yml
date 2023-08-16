@@ -17,6 +17,10 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  host: <%= ENV['POSTGRES_HOST'] || 'localhost' %>
+  username: <%= ENV['TRACK_MY_SHOP_API_DATABASE_USER'] || 'postgres' %>
+  password: <%= ENV['TRACK_MY_SHOP_API_DATABASE_PASSWORD'] || 'postgres' %>
+
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
