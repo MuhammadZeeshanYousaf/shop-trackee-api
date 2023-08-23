@@ -1,6 +1,6 @@
 # app/lib/devise/api/responses/token_response_decorator.rb
 module Devise::Api::Responses::TokenResponseDecorator
   def body
-    default_body.merge({ role: resource_owner.role.name })
+    default_body.merge(resource_owner: { **default_body[:resource_owner], role: resource_owner.role.name })
   end
 end
