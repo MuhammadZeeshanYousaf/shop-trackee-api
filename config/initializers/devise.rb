@@ -310,6 +310,12 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+  config.api.configure do |api|
+    # Expiry of Access and Refresh Token
+    api.access_token.expires_in = 1.day
+    api.refresh_token.expires_in = 1.week
+  end
+
 end
 
 Devise::Api::Responses::TokenResponse.prepend Devise::Api::Responses::TokenResponseDecorator
