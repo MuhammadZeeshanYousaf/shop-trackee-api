@@ -9,5 +9,8 @@ class User < ApplicationRecord
 
   delegate :admin?, :seller?, :customer?, to: :role, prefix: true
 
+  before_validation do
+    self.role = Role.find_by_name 'customer'
+  end
 
 end
