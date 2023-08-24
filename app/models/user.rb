@@ -10,7 +10,7 @@ class User < ApplicationRecord
   delegate :admin?, :seller?, :customer?, to: :role, prefix: true
 
   before_validation do
-    self.role = Role.find_by_name 'customer'
+    self.role = Role.find_by_name(Role.names[:customer]) unless role_id?
   end
 
 end
