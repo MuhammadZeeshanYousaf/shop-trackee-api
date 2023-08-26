@@ -8,7 +8,7 @@ class User < ApplicationRecord
     seller: 'seller',
     customer: 'customer'
   }
-  validates :name, :role, presence: true
+  validates :role, presence: true, inclusion: { in: roles.values }
 
   has_one :customer
   has_one :seller
