@@ -4,13 +4,12 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :api
 
-  belongs_to :role
-  has_one :business, dependent: :destroy
+  enum :role, {
+    seller: 'seller',
+    customer: 'customer'
+  }
+  validates :name, :role, presence: true
 
-  delegate :admin?, :seller?, :customer?, to: :role, prefix: true
 
-  before_validation do
-    self.role = Role.find_by_name(Role.names[:customer]) unless role_id?
-  end
 
 end
