@@ -84,7 +84,4 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  database: track_my_shop_api_production
-  username: track_my_shop_api
-  password: <%= ENV["TRACK_MY_SHOP_API_DATABASE_PASSWORD"] %>
+  url: <%= ENV['DATABASE_URL'] %>
