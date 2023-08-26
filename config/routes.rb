@@ -11,7 +11,7 @@ Rails.application.routes.draw do
                  controllers: { tokens: 'devise/api/tokens' },
                  defaults: { format: :json }
       # ... other API routes ...
-
+      resource :user, only: :update
     end
   end
 end
