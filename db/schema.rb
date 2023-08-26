@@ -16,7 +16,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_26_102725) do
 
   create_table "customers", force: :cascade do |t|
     t.string "vocation"
-    t.string "gender"
     t.string "age"
     t.boolean "newsletter_subscribed", default: false
     t.bigint "user_id"
@@ -50,6 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_26_102725) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+    t.string "gender"
     t.string "country", default: "Pakistan"
     t.string "phone"
     t.text "address"
