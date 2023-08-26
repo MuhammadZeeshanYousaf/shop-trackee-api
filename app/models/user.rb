@@ -10,6 +10,6 @@ class User < ApplicationRecord
   }
   validates :name, :role, presence: true
 
-
+  has_one :customer
 
 end
