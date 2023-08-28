@@ -7,7 +7,7 @@ class Devise::Api::Responses::UserParamSanitizer
   end
 
   def self.present
-    [:id, :name, :email, :gender, :country, :phone, :address, :avatar, :role, :created_at, :updated_at]
+    [:id, :name, :email, :gender, :country, :phone, :address, :role, :created_at, :updated_at]
   end
 
 end
