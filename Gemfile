@@ -52,3 +52,4 @@ end
 
 gem "devise", "~> 4.9"
 gem 'devise-api', github: 'nejdetkadir/devise-api', branch: 'main'
+gem "aws-sdk-s3", require: false
