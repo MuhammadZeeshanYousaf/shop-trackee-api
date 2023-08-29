@@ -1,5 +1,4 @@
-# app/controllers/concerns/url_helpers_concern.rb
-module UrlHelpersConcern
+module ImagePathHelper
   extend ActiveSupport::Concern
 
   included do
