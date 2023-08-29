@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_28_095956) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_29_152436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -71,11 +71,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_095956) do
   create_table "sellers", force: :cascade do |t|
     t.text "intro", comment: "A short introduction for customers."
     t.integer "rating", default: 0
-    t.string "website_url", comment: "Business website url."
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sellers_on_user_id"
+  end
+
+  create_table "shops", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "address", comment: "Custom address of shop."
+    t.string "contact", comment: "Business contact number."
+    t.time "opening_time", comment: "Format could be 16:57:19"
+    t.time "closing_time"
+    t.integer "closing_days", default: [], null: false, comment: "In these days the shop is closed, starting from Monday:0", array: true
+    t.string "social_links", default: [], array: true
+    t.string "shop_website_url", comment: "Online shop website url if exists."
+    t.bigint "seller_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["closing_days"], name: "index_shops_on_closing_days", using: :gin
+    t.index ["seller_id"], name: "index_shops_on_seller_id"
+    t.index ["social_links"], name: "index_shops_on_social_links", using: :gin
   end
 
   create_table "users", force: :cascade do |t|
