@@ -6,9 +6,10 @@ module Devise::Api::Responses::TokenResponseDecorator
     if resource_owner.persisted? && @action == :sign_up
       resource_owner.update(Devise::Api::Responses::UserParamSanitizer.sanitize{|sanitized| @request.params.slice(*sanitized)})
     end
+    @avatar_path = rails_blob_path(resource_owner.avatar, only_path: true) if resource_owner.avatar.attached?
 
     default_body.merge(resource_owner: { **resource_owner.attributes.with_indifferent_access.slice(*Devise::Api::Responses::UserParamSanitizer.present),
-                                         avatar: rails_blob_path(resource_owner.avatar, only_path: true) })
+                                         avatar: @avatar_path })
   end
 
 end
