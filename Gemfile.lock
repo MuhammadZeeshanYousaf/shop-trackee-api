@@ -84,6 +84,8 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
+    array_enum (1.4.0)
+      activemodel
     aws-eventstream (1.2.0)
     aws-partitions (1.812.0)
     aws-sdk-core (3.181.0)
@@ -265,6 +267,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (~> 0.10.2)
+  array_enum (~> 1.4)
   aws-sdk-s3
   bootsnap
   byebug (~> 11.1, >= 11.1.3)
