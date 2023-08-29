@@ -1,10 +1,12 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user
-  include UrlHelpersConcern
 
   def update
     if @user.update(user_params)
-      render json: { message: "#{@user.name}'s information updated successfully", avatar: path_for(@user.avatar) }
+      render json: {
+        message: "#{@user.name}'s information updated successfully",
+        user: UserSerializer.new(@user).serializable_hash
+      }
     else
       render json: {
         message: "#{@user.name}'s' information not updated",
