@@ -3,14 +3,16 @@ class Api::V1::UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      render json: { message: "#{@user.name}'s information updated successfully" }
+      render json: {
+        message: "#{@user.name}'s information updated successfully",
+        user: UserSerializer.new(@user).serializable_hash
+      }
     else
       render json: {
         message: "#{@user.name}'s' information not updated",
         error: @user.errors.full_messages.to_sentence
       }, status: :unprocessable_entity
     end
-
   end
 
 
