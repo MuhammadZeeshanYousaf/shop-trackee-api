@@ -1,5 +1,6 @@
 # app/lib/devise/api/responses/token_response_decorator.rb
 require_relative 'user_param_sanitizer'
+include Rails.application.routes.url_helpers
 module Devise::Api::Responses::TokenResponseDecorator
   def body
     if resource_owner.persisted? && @action == :sign_up
@@ -7,7 +8,7 @@ module Devise::Api::Responses::TokenResponseDecorator
     end
 
     default_body.merge(resource_owner: { **resource_owner.attributes.with_indifferent_access.slice(*Devise::Api::Responses::UserParamSanitizer.present),
-                                         avatar: Rails.application.routes.url_helpers.rails_blob_path(resource_owner.avatar, only_path: true) })
+                                         avatar: rails_blob_path(resource_owner.avatar, only_path: true) })
   end
 
 end
