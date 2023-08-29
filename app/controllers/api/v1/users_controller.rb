@@ -1,16 +1,16 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user
+  include UrlHelpersConcern
 
   def update
     if @user.update(user_params)
-      render json: { message: "#{@user.name}'s information updated successfully" }
+      render json: { message: "#{@user.name}'s information updated successfully", avatar: path_for(@user.avatar) }
     else
       render json: {
         message: "#{@user.name}'s' information not updated",
         error: @user.errors.full_messages.to_sentence
       }, status: :unprocessable_entity
     end
-
   end
 
 
