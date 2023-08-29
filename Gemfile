@@ -41,6 +41,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem 'dotenv-rails', require: 'dotenv/rails-now'
   gem 'rspec-rails', '~> 6.0.3'
+  gem 'byebug', '~> 11.1', '>= 11.1.3'
 end
 
 group :development do
