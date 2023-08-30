@@ -7,13 +7,19 @@ class Api::V1::UsersController < ApplicationController
       if @user.customer?
         @customer = Customer.find_or_initialize_by user: @user
         @customer.assign_attributes customer_params
-        @customer.save
-        role_based_obj = { customer: @customer&.serializable_hash }
+        if @customer.save
+          role_based_obj = { customer: @customer.serializable_hash }
+        else
+          role_based_obj = { error: @customer.errors.full_messages.to_sentence }
+        end
       elsif @user.seller?
         @seller = Seller.find_or_initialize_by user: @user
         @seller.assign_attributes seller_params
-        @seller.save
-        role_based_obj = { seller: @seller&.serializable_hash }
+        if @seller.save
+          role_based_obj = { seller: @seller.serializable_hash }
+        else
+          role_based_obj = { error: @seller.errors.full_messages.to_sentence }
+        end
       end
 
       render json: {
