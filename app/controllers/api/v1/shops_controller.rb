@@ -28,7 +28,7 @@ class Api::V1::ShopsController < ApplicationController
     @shop = @seller.shops.new shop_params
 
     if @shop.save
-      render json: @shop, serializer: ShopSerializer, status: :created, location: @shop
+      render json: @shop, serializer: ShopSerializer, status: :created, location: api_v1_shop_url(@shop)
     else
       render json: {
         message: 'Shop not created',
