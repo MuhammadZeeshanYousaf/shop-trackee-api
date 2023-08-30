@@ -17,4 +17,10 @@ class User < ApplicationRecord
   has_one :customer
   has_one :seller
 
+  delegate :can?, :cannot?, to: :ability
+
+  def ability
+    @ability ||= Ability.new(self)
+  end
+
 end
