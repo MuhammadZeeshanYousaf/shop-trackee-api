@@ -4,7 +4,7 @@ class Api::V1::UsersController < ApplicationController
   def update
     if @user.update(user_params)
       role_based_obj = {}
-      if @user.customer?
+      if @user.role_customer?
         @customer = Customer.find_or_initialize_by user: @user
         @customer.assign_attributes customer_params
         if @customer.save
@@ -12,7 +12,7 @@ class Api::V1::UsersController < ApplicationController
         else
           role_based_obj = { error: @customer.errors.full_messages.to_sentence }
         end
-      elsif @user.seller?
+      elsif @user.role_seller?
         @seller = Seller.find_or_initialize_by user: @user
         @seller.assign_attributes seller_params
         if @seller.save

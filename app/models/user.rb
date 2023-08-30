@@ -11,7 +11,7 @@ class User < ApplicationRecord
   enum :role, {
     seller: 'seller',
     customer: 'customer'
-  }
+  }, prefix: true
   validates :role, presence: true, inclusion: { in: roles.values }
 
   has_one :customer
