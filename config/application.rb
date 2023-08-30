@@ -19,6 +19,9 @@ module TrackMyShopApi
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # Handle cancancan exception CanCan::AccessDenied
+    # config.action_dispatch.rescue_responses.merge!('CanCan::AccessDenied' => :unauthorized)
+
     # customize rails generator workflow
     config.generators do |g|
       g.test_framework :rspec

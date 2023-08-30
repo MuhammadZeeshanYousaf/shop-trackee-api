@@ -11,10 +11,16 @@ class User < ApplicationRecord
   enum :role, {
     seller: 'seller',
     customer: 'customer'
-  }
+  }, prefix: true
   validates :role, presence: true, inclusion: { in: roles.values }
 
   has_one :customer
   has_one :seller
+
+  delegate :can?, :cannot?, to: :ability
+
+  def ability
+    @ability ||= Ability.new(self)
+  end
 
 end

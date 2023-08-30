@@ -56,3 +56,4 @@ gem 'devise-api', github: 'nejdetkadir/devise-api', branch: 'main'
 gem "aws-sdk-s3", require: false
 gem 'active_model_serializers', '~> 0.10.2'
 gem 'array_enum', '~> 1.4'
+gem 'cancancan', '~> 3.5'
