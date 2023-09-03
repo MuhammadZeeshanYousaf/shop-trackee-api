@@ -10,13 +10,18 @@ Rails.application.routes.draw do
       devise_for :users,
                  controllers: { tokens: 'devise/api/tokens' },
                  defaults: { format: :json }
+
       # ... other API routes ...
+      concern :buildable do
+        get 'new', on: :collection
+      end
+
       resource :user, only: :update
       resources :shops do
-        resources :products do
-          get 'new', on: :collection
-        end
+        resources :products, concerns: :buildable
+        resources :services, concerns: :buildable
       end
+
     end
   end
 end
