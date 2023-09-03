@@ -4,14 +4,7 @@ class Api::V1::ProductsController < ApplicationController
 
   # GET /products
   def index
-    if @shop.present?
-      render json: @shop.products, each_serializer: ProductSerializer
-    else
-      render json: {
-        message: "#{current_devise_api_user&.name} is Unauthorized",
-        error: "#{current_devise_api_user&.role} is not authorized to access products"
-      }, status: :unauthorized
-    end
+    render json: @shop.products, each_serializer: ProductSerializer
   end
 
   # GET /products/1
