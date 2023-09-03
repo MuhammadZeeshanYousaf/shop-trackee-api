@@ -28,7 +28,7 @@ class Api::V1::ProductsController < ApplicationController
     @product = @shop.products.new
     render json: {
       product: @product,
-      categories: Category.find_by type: Product.to_s
+      categories: Category.where(category_type: Product.to_s).map(&:name)
     }
   end
 
