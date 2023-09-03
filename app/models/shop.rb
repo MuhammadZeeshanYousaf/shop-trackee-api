@@ -7,5 +7,7 @@ class Shop < ApplicationRecord
   validates :name, uniqueness: { scope: :seller }
 
   belongs_to :seller
+  has_many :products
+  has_many :services
 
 end

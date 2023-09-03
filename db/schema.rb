@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_30_131515) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_03_164419) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_30_131515) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.string "category_type"
+    t.bigint "parent_id", comment: "Category can be sub-category and it will have a parent."
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_id"], name: "index_categories_on_parent_id"
+  end
+
   create_table "customers", force: :cascade do |t|
     t.string "vocation"
     t.integer "age"
@@ -68,6 +77,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_30_131515) do
     t.index ["resource_owner_type", "resource_owner_id"], name: "index_devise_api_tokens_on_resource_owner"
   end
 
+  create_table "products", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.decimal "price", default: "1.0"
+    t.integer "stock_quantity", default: 1
+    t.bigint "category_id", null: false
+    t.bigint "shop_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_products_on_category_id"
+    t.index ["shop_id"], name: "index_products_on_shop_id"
+  end
+
   create_table "sellers", force: :cascade do |t|
     t.text "intro", comment: "A short introduction for customers."
     t.integer "rating", default: 0
@@ -75,6 +97,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_30_131515) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sellers_on_user_id"
+  end
+
+  create_table "services", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.decimal "rate", default: "1.0"
+    t.integer "charge_by", default: 0, comment: "A rails enum, it could be charge by hour, day, work respectively."
+    t.bigint "category_id", null: false
+    t.bigint "shop_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_services_on_category_id"
+    t.index ["shop_id"], name: "index_services_on_shop_id"
   end
 
   create_table "shops", force: :cascade do |t|
@@ -116,7 +151,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_30_131515) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "customers", "users"
+  add_foreign_key "products", "categories"
+  add_foreign_key "products", "shops"
   add_foreign_key "sellers", "users"
+  add_foreign_key "services", "categories"
+  add_foreign_key "services", "shops"
   add_foreign_key "shops", "sellers"
 end
