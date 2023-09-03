@@ -74,7 +74,7 @@ class Api::V1::ProductsController < ApplicationController
     end
 
     def set_product
-      @product = Product.find params[:id], params[:shop_id]
+      @product = Product.find_by id: params[:id], shop_id: params[:shop_id]
     end
 
     # Only allow a list of trusted parameters through.
