@@ -18,9 +18,12 @@ class Api::V1::ServicesController < ApplicationController
 
   # GET /services/new
   def new
-    @service = @shop.products.new
+    @service = @shop.services.new
+    service_attrs = @service.serializable_hash(except: :category_id)
+    service_attrs[:charge_by] = Service.charge_bies.keys
+
     render json: {
-      service: @service,
+      service: service_attrs,
       categories: Category.where(category_type: Service.to_s).map(&:name)
     }
   end
