@@ -28,9 +28,10 @@ class Api::V1::ProductsController < ApplicationController
   # POST /products
   def create
     @product = @shop.products.new product_params
+    @product.category = Category.find_by_name params[:category_name]
 
     if @product.save
-      render json: @product, serializer: ProductSerializer, status: :created, location: api_v1_shop_product_url(@product)
+      render json: @product, serializer: ProductSerializer, status: :created, location: api_v1_shop_product_url(@shop, @product)
     else
       render json: {
         message: 'Product not created',
@@ -56,7 +57,11 @@ class Api::V1::ProductsController < ApplicationController
 
   # DELETE /products/1
   def destroy
-    @product.destroy
+    if @product&.destroy
+      render json: { message: "Product '#{@product.name}' deleted successfully" }
+    else
+      render json: { message: "Product with id: #{params[:id]} does not exist." }, status: :not_found
+    end
   end
 
 

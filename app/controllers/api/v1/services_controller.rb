@@ -1,4 +1,4 @@
-class ServicesController < ApplicationController
+class Api::V1::ServicesController < ApplicationController
   before_action :set_shop, except: %i[ show update destroy ]
   before_action :set_service, only: %i[ show update destroy ]
 
@@ -28,9 +28,10 @@ class ServicesController < ApplicationController
   # POST /services
   def create
     @service = @shop.services.new service_params
+    @service.category = Category.find_by_name params[:category_name]
 
     if @service.save
-      render json: @service, serializer: ServiceSerializer, status: :created, location: api_v1_shop_service_url(@service)
+      render json: @service, serializer: ServiceSerializer, status: :created, location: api_v1_shop_service_url(@shop, @service)
     else
       render json: {
         message: 'Service not created',
@@ -56,7 +57,11 @@ class ServicesController < ApplicationController
 
   # DELETE /services/1
   def destroy
-    @service.destroy
+    if @service&.destroy
+      render json: { message: "Service '#{@service.name}' deleted successfully" }
+    else
+      render json: { message: "Service with id: #{params[:id]} does not exist." }, status: :not_found
+    end
   end
 
   private
