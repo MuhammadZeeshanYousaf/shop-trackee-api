@@ -70,7 +70,7 @@ class Api::V1::ProductsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
     def set_shop
-      @shop = Shop.find_by id: params[:shop_id], seller: current_v1_api_user.seller
+      @shop = Shop.find_by id: params[:shop_id]
     end
 
     def set_product
