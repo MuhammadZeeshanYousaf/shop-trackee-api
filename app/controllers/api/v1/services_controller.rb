@@ -16,7 +16,7 @@ class ServicesController < ApplicationController
     end
   end
 
-  # GET /products/new
+  # GET /services/new
   def new
     @service = @shop.products.new
     render json: {
