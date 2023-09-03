@@ -12,7 +12,11 @@ Rails.application.routes.draw do
                  defaults: { format: :json }
       # ... other API routes ...
       resource :user, only: :update
-      resources :shops
+      resources :shops do
+        resources :products do
+          get 'new', on: :collection
+        end
+      end
     end
   end
 end
