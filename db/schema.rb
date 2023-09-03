@@ -83,9 +83,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_03_164419) do
     t.decimal "price", default: "1.0"
     t.integer "stock_quantity", default: 1
     t.bigint "category_id", null: false
+    t.bigint "shop_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_products_on_category_id"
+    t.index ["shop_id"], name: "index_products_on_shop_id"
   end
 
   create_table "sellers", force: :cascade do |t|
@@ -103,9 +105,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_03_164419) do
     t.decimal "rate", default: "1.0"
     t.integer "charge_by", default: 0, comment: "A rails enum, it could be charge by hour, day, work respectively."
     t.bigint "category_id", null: false
+    t.bigint "shop_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_services_on_category_id"
+    t.index ["shop_id"], name: "index_services_on_shop_id"
   end
 
   create_table "shops", force: :cascade do |t|
@@ -150,7 +154,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_03_164419) do
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "customers", "users"
   add_foreign_key "products", "categories"
+  add_foreign_key "products", "shops"
   add_foreign_key "sellers", "users"
   add_foreign_key "services", "categories"
+  add_foreign_key "services", "shops"
   add_foreign_key "shops", "sellers"
 end
