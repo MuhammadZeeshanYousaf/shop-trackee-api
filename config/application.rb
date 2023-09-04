@@ -31,6 +31,9 @@ module TrackMyShopApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # set default url host for url helpers in mailer views
+    config.action_mailer.default_url_options = { host: ENV.fetch('HOST_URL') { "http://localhost:#{ENV['PORT'] || 3000}" }  }
   end
 end
 
