@@ -33,3 +33,6 @@ module TrackMyShopApi
     config.api_only = true
   end
 end
+
+# set default url option to generate urls using url helpers
+Rails.application.routes.default_url_options[:host] = ENV.fetch('HOST_URL') { "http://localhost:#{ENV['PORT'] || 3000}" }
