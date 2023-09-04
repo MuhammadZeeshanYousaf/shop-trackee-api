@@ -45,7 +45,7 @@ class Api::V1::ServicesController < ApplicationController
 
   # PATCH/PUT /services/1
   def update
-    if @service.update(service_params)
+    if @service&.update(service_params)
       render json: {
         message: "Service '#{@service.name}' updated successfully",
         product: ServiceSerializer.new(@service).serializable_hash

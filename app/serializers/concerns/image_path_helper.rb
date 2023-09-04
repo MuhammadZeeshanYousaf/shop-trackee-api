@@ -6,7 +6,7 @@ module ImagePathHelper
   end
 
   def path_for(img_obj)
-    rails_blob_path(img_obj, only_path: true)
+    rails_blob_path(img_obj, only_path: true, disposition: "attachment")
   end
 
 end

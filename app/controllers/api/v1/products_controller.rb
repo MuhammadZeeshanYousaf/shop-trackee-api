@@ -42,7 +42,7 @@ class Api::V1::ProductsController < ApplicationController
 
   # PATCH/PUT /products/1
   def update
-    if @product.update(product_params)
+    if @product&.update(product_params)
       render json: {
         message: "Product '#{@product.name}' updated successfully",
         product: ProductSerializer.new(@product).serializable_hash
