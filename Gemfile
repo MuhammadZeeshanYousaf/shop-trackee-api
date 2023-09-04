@@ -54,6 +54,7 @@ end
 gem "devise", "~> 4.9"
 gem 'devise-api', github: 'nejdetkadir/devise-api', branch: 'main'
 gem "aws-sdk-s3", require: false
+gem 'aws-sdk-rekognition', '~> 1.86'
 gem 'active_model_serializers', '~> 0.10.2'
 gem 'array_enum', '~> 1.4'
 gem 'cancancan', '~> 3.5'

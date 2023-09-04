@@ -96,6 +96,9 @@ GEM
     aws-sdk-kms (1.71.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
+    aws-sdk-rekognition (1.86.0)
+      aws-sdk-core (~> 3, >= 3.177.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.134.0)
       aws-sdk-core (~> 3, >= 3.181.0)
       aws-sdk-kms (~> 1)
@@ -269,6 +272,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.10.2)
   array_enum (~> 1.4)
+  aws-sdk-rekognition (~> 1.86)
   aws-sdk-s3
   bootsnap
   byebug (~> 11.1, >= 11.1.3)
