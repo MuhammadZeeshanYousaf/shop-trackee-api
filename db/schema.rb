@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_03_164419) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_04_090459) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -125,6 +125,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_03_164419) do
     t.bigint "seller_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "latitude", precision: 10, scale: 8
+    t.decimal "longitude", precision: 11, scale: 8
     t.index ["closing_days"], name: "index_shops_on_closing_days", using: :gin
     t.index ["seller_id"], name: "index_shops_on_seller_id"
     t.index ["social_links"], name: "index_shops_on_social_links", using: :gin

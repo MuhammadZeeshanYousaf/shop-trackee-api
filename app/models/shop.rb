@@ -5,6 +5,7 @@ class Shop < ApplicationRecord
                              'Thursday' => 3, 'Friday' => 4, 'Saturday' => 5, 'Sunday' => 6 }
   validates :closing_days, subset: closing_days.keys
   validates :name, uniqueness: { scope: :seller }
+  # validates :latitude, :longitude, presence: true
 
   belongs_to :seller
   has_many :products
