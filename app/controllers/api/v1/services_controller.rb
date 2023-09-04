@@ -19,7 +19,7 @@ class Api::V1::ServicesController < ApplicationController
   # GET /services/new
   def new
     @service = @shop.services.new
-    service_attrs = @service.serializable_hash(except: :category_id)
+    service_attrs = @service.serializable_hash(except: :category_id, include: :images)
     service_attrs[:charge_by] = Service.charge_bies.keys
 
     render json: {

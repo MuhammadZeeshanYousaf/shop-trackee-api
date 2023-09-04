@@ -20,7 +20,7 @@ class Api::V1::ProductsController < ApplicationController
   def new
     @product = @shop.products.new
     render json: {
-      product: @product.serializable_hash(except: :category_id),
+      product: @product.serializable_hash(except: :category_id, include: :images),
       categories: Category.where(category_type: Product.to_s).map(&:name)
     }
   end
