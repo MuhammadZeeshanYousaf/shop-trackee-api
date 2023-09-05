@@ -58,3 +58,5 @@ gem 'aws-sdk-rekognition', '~> 1.86'
 gem 'active_model_serializers', '~> 0.10.2'
 gem 'array_enum', '~> 1.4'
 gem 'cancancan', '~> 3.5'
+gem "sentry-ruby"
+gem "sentry-rails"
