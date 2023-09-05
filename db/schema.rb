@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_04_090459) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_05_144033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -117,8 +117,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_090459) do
     t.text "description"
     t.string "address", comment: "Custom address of shop."
     t.string "contact", comment: "Business contact number."
-    t.time "opening_time", comment: "Format could be 16:57:19"
-    t.time "closing_time"
     t.integer "closing_days", default: [], null: false, comment: "In these days the shop is closed, starting from Monday:0", array: true
     t.string "social_links", default: [], array: true
     t.string "shop_website_url", comment: "Online shop website url if exists."
@@ -127,6 +125,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_04_090459) do
     t.datetime "updated_at", null: false
     t.decimal "latitude", precision: 10, scale: 8
     t.decimal "longitude", precision: 11, scale: 8
+    t.datetime "closing_time"
+    t.datetime "opening_time"
     t.index ["closing_days"], name: "index_shops_on_closing_days", using: :gin
     t.index ["seller_id"], name: "index_shops_on_seller_id"
     t.index ["social_links"], name: "index_shops_on_social_links", using: :gin

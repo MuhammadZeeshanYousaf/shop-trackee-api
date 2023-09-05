@@ -3,11 +3,11 @@ class ShopSerializer < ActiveModel::Serializer
   has_one :seller
 
   def opening_time
-    object.opening_time&.strftime("%I:%M%p")
+    object.opening_time&.strftime(DATETIME_FORMAT)
   end
 
   def closing_time
-    object.closing_time&.strftime("%I:%M%p")
+    object.closing_time&.strftime(DATETIME_FORMAT)
   end
 
 end
