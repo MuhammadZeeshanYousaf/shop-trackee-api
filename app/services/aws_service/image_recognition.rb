@@ -55,28 +55,31 @@ module AwsService
           # object categories
           label_categories = label.categories.reduce([]) do |accum, category|
             accum << category.name
-          end.to_sentence
-          categories_desc = label_categories.present? ? "It could be categorized as #{label_categories}. " : ''
+          end
+          categories_sentence = label_categories.to_sentence
+          categories_desc = categories_sentence.present? ? "It could be categorized as #{categories_sentence}. " : ''
 
           # object aliases
           label_aliases = label.aliases.reduce([]) do |accum, label_alias|
             accum << label_alias&.values
-          end
-          aliases_desc = "It can be identified as #{label_aliases} "
+          end.to_sentence
+          aliases_desc = label_aliases.present? ? "It can be identified as #{label_aliases} " : ''
 
           # object scales
-          label_scale = label['instances'].first['bounding_box']
-          scale = [wide: (label_scale.width * 100).floor, large: (label_scale * 100).floor]
-          scale_desc = scale[:wide].present? && scale[:large].present? ? "and it is measured as #{scale[:wide]} percent wide "\
-            "and #{scale[:large]} percent large inside the image. " : ''
-
+          bounding_box = label['instances'].first
+          if bounding_box.present?
+            label_scale = bounding_box['bounding_box']
+            scale = { wide: (label_scale.width * 100).floor, large: (label_scale.height * 100).floor }
+            @scale_desc = scale[:wide].present? && scale[:large].present? ? "It is measured as #{scale[:wide]} percent wide "\
+              "and #{scale[:large]} percent large inside the image. " : ''
+          end
 
 
           # -- Generating data Hashes --
           hash_labels << {
             name: label.name,
-            description: "It is #{label.name}#{parents_desc}. " + categories_desc + aliases_desc + scale_desc,
-            categories: label.categories,
+            description: "It is #{label.name}#{parents_desc}. " + categories_desc + aliases_desc + "#{@scale_desc}",
+            categories: label_categories,
             certainty: label.confidence,
           }
         end
