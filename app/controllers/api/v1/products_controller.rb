@@ -76,7 +76,7 @@ class Api::V1::ProductsController < ApplicationController
     if @product.save(validate: false)
       render json: {
         message: 'Product image uploaded successfully',
-        images: ProductSerializer.new(@product).serializable_hash(only: :images)
+        images: ProductSerializer.new(@product).serializable_hash[:images]
       }, status: :created, location: api_v1_shop_product_path(@shop, @product)
     else
       render json: {
