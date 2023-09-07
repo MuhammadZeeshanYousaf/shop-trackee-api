@@ -1,8 +1,9 @@
 class Product < ApplicationRecord
+  include ShopItemsModifiable
   belongs_to :shop
   belongs_to :category
   has_many_attached :images
 
-  validates :name, :price, :stock_quantity, presence: true
+  validates_presence_of :name, :price, :stock_quantity
   delegate :name, to: :category, prefix: true
 end

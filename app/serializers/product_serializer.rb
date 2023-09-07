@@ -6,7 +6,9 @@ class ProductSerializer < ActiveModel::Serializer
   def images
     if object.images.attached?
       object.images.map do |image|
-        path_for image
+        { id: image.id,
+          path: path_for(image)
+        }
       end
     else []
     end
