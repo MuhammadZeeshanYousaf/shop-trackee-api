@@ -114,17 +114,25 @@ class Api::V1::ProductsController < ApplicationController
 
   # GET /products/:id/images/:image_id/recognize
   def recognize
-    image_key = @product&.get_image_key(params[:image_id])
-    image_data = AwsService::ImageRecognition.call(image_key)
-    if image_data.present?
-      # GENERATE OBJECT HERE
+    if @product.present?
+      image_key = @product.get_image_key(params[:image_id])
+      image_data = AwsService::ImageRecognition.call(image_key)
+      if image_data.length > 0
+        # GENERATE OBJECT HERE
+        first_label = image_data.first
+        @product.assign_attributes first_label.slice(:name, :description)
+        @product.category = Category.find_all_like(first_label[:categories]).first
 
-    else
-      render json: {
-        message: 'Image not found',
-        error: @product&.errors&.full_messages&.to_sentence
-      }, status: :not_found
+        if @product.save
+          return render(json: ProductSerializer.new(@product).serializable_hash.merge(first_label.slice(:certainty)))
+        end
+      end
     end
+
+    render json: {
+      message: 'Image not found',
+      error: @product&.errors&.full_messages&.to_sentence
+    }, status: :not_found
   end
 
 

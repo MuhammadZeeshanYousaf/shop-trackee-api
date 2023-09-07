@@ -6,7 +6,7 @@ module AwsService
     end
 
     def call
-      return nil if @image.blank?
+      return [] if @image.blank?
       client = Aws::Rekognition::Client.new
       attrs = {
         image: {
@@ -70,13 +70,13 @@ module AwsService
           scale_desc = scale[:wide].present? && scale[:large].present? ? "and it is measured as #{scale[:wide]} percent wide "\
             "and #{scale[:large]} percent large inside the image. " : ''
 
+
+
           # -- Generating data Hashes --
           hash_labels << {
             name: label.name,
             description: "It is #{label.name}#{parents_desc}. " + categories_desc + aliases_desc + scale_desc,
-            category: {
-              name: label.categories.first.name
-            },
+            categories: label.categories,
             certainty: label.confidence,
           }
         end
