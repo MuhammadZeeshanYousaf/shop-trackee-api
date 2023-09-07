@@ -1,6 +1,6 @@
 class Api::V1::ProductsController < ApplicationController
   before_action :set_shop, except: %i[ show update destroy ]
-  before_action :set_product, only: %i[ show update destroy create_or_upload replace_image recognize ]
+  before_action :set_product, only: %i[ show update destroy create_or_upload replace_image remove_image recognize ]
 
   # GET /products
   def index
@@ -110,6 +110,15 @@ class Api::V1::ProductsController < ApplicationController
       message: 'Image not found',
       error: @product&.errors&.full_messages&.to_sentence
     }, status: :not_found
+  end
+
+  # DELETE /products/:id/images/:image_id
+  def remove_image
+    if @product&.remove_image(params[:image_id])
+      render json: { message: "Image deleted successfully" }
+    else
+      render json: { message: "Image not found with id: #{params[:image_id]} and product id: #{params[:id]}" }, status: :not_found
+    end
   end
 
   # GET /products/:id/images/:image_id/recognize
