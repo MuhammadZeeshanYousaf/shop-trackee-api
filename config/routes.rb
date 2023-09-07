@@ -17,7 +17,7 @@ Rails.application.routes.draw do
           get 'new'
           put '(:id)/images', action: 'create_or_upload'
           patch ':id/images/:image_id/replace', action: 'replace'
-          get 'recognize', action: 'recognize'
+          get ':id/images/:image_id/recognize', action: 'recognize'
         end
       end
 
