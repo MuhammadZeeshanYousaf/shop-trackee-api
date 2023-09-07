@@ -115,40 +115,10 @@ class Api::V1::ProductsController < ApplicationController
   # GET /products/:id/images/:image_id/recognize
   def recognize
     image_key = @product&.get_image_key(params[:image_id])
-    if image_key.present?
-      client = Aws::Rekognition::Client.new
-      attrs = {
-        image: {
-          s3_object: {
-            bucket: ENV['AWS_DEFAULT_BUCKET'],
-            name: image_key
-          },
-        },
-        max_labels: 5
-      }
-      response = client.detect_labels attrs
-      response.labels.each do |label|
-        puts "Label:      #{label.name}"
-        puts "Confidence: #{label.confidence}"
-        puts "Instances:"
-        label['instances'].each do |instance|
-          box = instance['bounding_box']
-          puts "  Bounding box:"
-          puts "    Top:        #{box.top}"
-          puts "    Left:       #{box.left}"
-          puts "    Width:      #{box.width}"
-          puts "    Height:     #{box.height}"
-          puts "  Confidence: #{instance.confidence}"
-        end
-        puts "Parents:"
-        label.parents.each do |parent|
-          puts "  #{parent.name}"
-        end
-        puts "------------"
-        puts ""
-      end
+    image_data = AwsService::ImageRecognition.call(image_key)
+    if image_data.present?
+      # GENERATE OBJECT HERE
 
-      # RESPONSE CODE PENDING...
     else
       render json: {
         message: 'Image not found',
