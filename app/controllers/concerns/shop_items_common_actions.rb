@@ -2,7 +2,7 @@ module ShopItemsCommonActions
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_item_object, only: %i[ create_or_upload replace_image remove_image ]
+    before_action :set_item_object, only: %i[ create_or_upload replace_image remove_image recognize ]
 
     private
       def set_item_object
@@ -70,6 +70,33 @@ module ShopItemsCommonActions
     end
   end
 
+  # GET /objects/:id/images/:image_id/recognize
+  def recognize
+    if @object.persisted?
+      image_key = @object.get_image_key(params[:image_id])
+      image_data = AwsService::ImageRecognition.call(image_key)
+
+      if image_data.length > 0
+        @objects = []
+        # Generate objects
+        image_data.each do |label_data|
+          category = Category.find_all_like(label_data[:categories]).first
+          category = Category.create(name: label_data[:categories].first, category_type: @object.class.to_s) if category.blank?
+          category = Category.first if label_data[:categories].blank?
+          object = @object.class.new label_data.slice(:name, :description).merge(shop_id: @object.shop_id, category_id: category.id)
+
+          @objects << object
+        end
+
+        return render(json: @objects, each_serializer: @object.class.to_s.concat('Serializer').constantize)
+      end
+    end
+
+    render json: {
+      message: 'Image not found',
+      error: @object&.errors&.full_messages&.to_sentence
+    }, status: :not_found
+  end
 
 
 end
