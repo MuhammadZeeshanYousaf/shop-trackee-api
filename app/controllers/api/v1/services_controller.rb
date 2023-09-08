@@ -1,4 +1,5 @@
 class Api::V1::ServicesController < ApplicationController
+  include ShopItemsCommonActions
   before_action :set_shop, except: %i[ show update destroy ]
   before_action :set_service, only: %i[ show update destroy ]
 

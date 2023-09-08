@@ -134,7 +134,7 @@ class Api::V1::ProductsController < ApplicationController
         image_data.each do |label_data|
           category = Category.find_all_like(label_data[:categories]).first
           category = Category.create(name: label_data[:categories].first, category_type: Product.to_s) if category.blank?
-          category = Category.first if label_data[:categories].blank?
+          category = Category.where(category_type: Product.to_s).first if label_data[:categories].blank?
           product = Product.new label_data.slice(:name, :description).merge(shop_id: @product.shop_id, category_id: category.id)
 
           @products << product

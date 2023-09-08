@@ -9,4 +9,16 @@ module ImagePathHelper
     rails_blob_path(img_obj, only_path: true, disposition: "attachment")
   end
 
+  def images
+    if object.images.attached?
+      object.images.map do |image|
+        { id: image.id,
+          path: path_for(image)
+        }
+      end
+    else []
+    end
+  end
+
+
 end
