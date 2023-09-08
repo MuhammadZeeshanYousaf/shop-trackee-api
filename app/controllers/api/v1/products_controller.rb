@@ -127,15 +127,20 @@ class Api::V1::ProductsController < ApplicationController
     if @product.present?
       image_key = @product.get_image_key(params[:image_id])
       image_data = AwsService::ImageRecognition.call(image_key)
-      if image_data.length > 0
-        # GENERATE OBJECT HERE
-        first_label = image_data.first
-        @product.assign_attributes first_label.slice(:name, :description)
-        @product.category = Category.find_all_like(first_label[:categories]).first
 
-        if @product.save
-          return render(json: ProductSerializer.new(@product).serializable_hash.merge(first_label.slice(:certainty)))
+      if image_data.length > 0
+        @products = []
+        # Generate Product objects
+        image_data.each do |label_data|
+          category = Category.find_all_like(label_data[:categories]).first
+          category = Category.create(name: label_data[:categories].first, category_type: Product.to_s) if category.blank?
+          category = Category.first if label_data[:categories].blank?
+          product = Product.new label_data.slice(:name, :description).merge(shop_id: @product.shop_id, category_id: category.id)
+
+          @products << product
         end
+
+        return render(json: @products, each_serializer: ProductSerializer)
       end
     end
 

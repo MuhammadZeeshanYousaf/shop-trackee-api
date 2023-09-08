@@ -6,5 +6,5 @@ class Service < ApplicationRecord
 
   enum :charge_by, { hour: 0, day: 1, work: 2 }
   validates :name, :rate, :charge_by, presence: true
-  delegate :name, to: :category, prefix: true
+  delegate :name, to: :category, prefix: true, allow_nil: true
 end
