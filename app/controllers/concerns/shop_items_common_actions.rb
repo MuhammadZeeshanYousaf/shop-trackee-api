@@ -2,7 +2,7 @@ module ShopItemsCommonActions
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_item_object, only: %i[ create_or_upload replace_image ]
+    before_action :set_item_object, only: %i[ create_or_upload replace_image remove_image ]
 
     private
       def set_item_object
@@ -60,5 +60,16 @@ module ShopItemsCommonActions
       error: @object&.errors&.full_messages&.to_sentence
     }, status: :not_found
   end
+
+  # DELETE /objects/:id/images/:image_id
+  def remove_image
+    if @object&.remove_image(params[:image_id])
+      render json: { message: "Image deleted successfully" }
+    else
+      render json: { message: "Image not found with id: #{params[:image_id]} and #{@object.class.to_s.underscore} id: #{params[:id]}" }, status: :not_found
+    end
+  end
+
+
 
 end
