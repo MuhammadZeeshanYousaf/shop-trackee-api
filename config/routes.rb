@@ -16,7 +16,7 @@ Rails.application.routes.draw do
         collection do
           get 'new'
           put '(:id)/images', action: 'create_or_upload'
-          patch ':id/images/:image_id/replace', action: 'replace'
+          patch ':id/images/:image_id/replace', action: 'replace_image'
           delete ':id/images/:image_id', action: 'remove_image'
           get ':id/images/:image_id/recognize', action: 'recognize'
         end

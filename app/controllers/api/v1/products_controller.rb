@@ -58,7 +58,7 @@ class Api::V1::ProductsController < ApplicationController
   # DELETE /products/1
   def destroy
     if @product&.destroy
-      render json: { message: "Product '#{@product.name}' deleted successfully" }
+      render json: { message: "Product deleted successfully" }
     else
       render json: { message: "Product with id: #{params[:id]} does not exist." }, status: :not_found
     end
@@ -89,7 +89,8 @@ class Api::V1::ProductsController < ApplicationController
   # PATCH /products/:id/images/:image_id/replace
   def replace_image
     if @product&.remove_image(params[:image_id])
-      if @product.images.attach(params[:image])
+      @product.images.attach(params[:image])
+      if @product.save(validate: false)
         return render(json: {
           message: 'Image replaced successfully',
           image: {
