@@ -2,7 +2,7 @@ module ShopItemsCommonActions
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_item_object, only: %i[ create_or_upload ]
+    before_action :set_item_object, only: %i[ create_or_upload replace_image ]
 
     private
       def set_item_object
@@ -12,7 +12,7 @@ module ShopItemsCommonActions
   end
 
 
-  # PUT /object/(:id)/images
+  # PUT /objects/(:id)/images
   def create_or_upload
     if @object.persisted?
       @object.images.attach(params[:images])
@@ -32,6 +32,33 @@ module ShopItemsCommonActions
         error: @object.errors.full_messages.to_sentence
       }, status: :unprocessable_entity
     end
+  end
+
+  # PATCH /objects/:id/images/:image_id/replace
+  def replace_image
+    if @object.persisted? && @object.remove_image(params[:image_id])
+      @object.images.attach(params[:image])
+      if @object.save(validate: false)
+        return render(json: {
+          message: 'Image replaced successfully',
+          image: {
+            id: @object.images.last.id,
+            path: rails_blob_path(@object.images.last)
+          }
+        })
+      else
+        return render(json: {
+          message: 'Previous image removed but new image not updated',
+          error: @object.errors.full_messages.to_sentence
+        })
+      end
+    end
+
+    # if image not exist / not replaced
+    render json: {
+      message: 'Image not found',
+      error: @object&.errors&.full_messages&.to_sentence
+    }, status: :not_found
   end
 
 end
