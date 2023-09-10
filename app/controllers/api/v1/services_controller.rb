@@ -80,6 +80,6 @@ class Api::V1::ServicesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def service_params
-      params.permit :name, :description, :published, :rate, :charge_by, images: []
+      params.permit :name, :description, :published, :rate, :charge_by
     end
 end
