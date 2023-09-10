@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_10_110136) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_10_165908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -80,7 +80,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_10_110136) do
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.decimal "price", default: "1.0"
+    t.float "price", default: 1.0
     t.integer "stock_quantity", default: 1
     t.bigint "category_id", null: false
     t.bigint "shop_id", null: false
@@ -103,7 +103,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_10_110136) do
   create_table "services", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.decimal "rate", default: "1.0"
+    t.float "rate", default: 1.0
     t.integer "charge_by", default: 0, comment: "A rails enum, it could be charge by hour, day, work respectively."
     t.bigint "category_id", null: false
     t.bigint "shop_id", null: false
