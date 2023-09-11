@@ -17,10 +17,26 @@ class User < ApplicationRecord
   has_one :customer
   has_one :seller
 
+  after_save :build_role_entity, unless: :role_entity_exist?
+
   delegate :can?, :cannot?, to: :ability
 
   def ability
     @ability ||= Ability.new(self)
   end
+
+  def role_entity_exist?
+    if role_seller?
+      seller.present?
+    elsif role_customer?
+      customer.present?
+    end
+  end
+
+  private
+    def build_role_entity
+      role_entity = role.camelize.constantize.new user: self
+      role_entity.save validate: false
+    end
 
 end
