@@ -27,7 +27,11 @@ Rails.application.routes.draw do
         resources :products, concerns: :buildable
         resources :services, concerns: :buildable
       end
-      resources :favorites
+
+      scope 'favorites' do
+        post '/', to: "favorites#create"
+        delete '/', to: 'favorites#destroy'
+      end
 
     end
   end

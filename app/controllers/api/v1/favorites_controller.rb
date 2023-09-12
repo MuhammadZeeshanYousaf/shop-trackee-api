@@ -1,6 +1,6 @@
 class Api::V1::FavoritesController < ApplicationController
   before_action :set_customer
-  before_action :set_favoritable, only: [ :create ]
+  before_action :set_favoritable, only: [ :create, :destroy ]
 
   # POST /favorites
   def create
@@ -10,12 +10,24 @@ class Api::V1::FavoritesController < ApplicationController
         render json: @favorite, serializer: FavoriteSerializer, status: :created
       else
         render json: {
-          message: 'Favorite not added',
+          message: 'Not added to Favorite',
           error: @favorite.errors.full_messages.to_sentence
         }, status: :unprocessable_entity
       end
     else
       render json: { message: 'Product or Service not found' }, status: :not_found
+    end
+  end
+
+  # DELETE /favorites
+  def destroy
+    if @customer.present? && @favoritable.present?
+      @favorite = @customer.favorites.find_by favoritable: @favoritable
+      if @favorite&.destroy
+        render json: { message: 'Removed from Favorites successfully' }
+      else
+        render json: { message: 'Favorite does not exist' }, status: :not_found
+      end
     end
   end
 
