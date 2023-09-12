@@ -27,6 +27,7 @@ Rails.application.routes.draw do
         resources :products, concerns: :buildable
         resources :services, concerns: :buildable
       end
+      resources :favorites
 
     end
   end

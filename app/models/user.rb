@@ -16,6 +16,7 @@ class User < ApplicationRecord
 
   has_one :customer
   has_one :seller
+  has_many :favorites, through: :customer
 
   after_save :build_role_entity, unless: :role_entity_exist?
 
