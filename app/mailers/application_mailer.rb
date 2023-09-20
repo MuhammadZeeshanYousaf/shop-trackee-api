@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: email_address_with_name("mailgun@#{ENV['MAILGUN_DOMAIN']}", APP_NAME)
+  default from: email_address_with_name(ENV['MAILJET_DEFAULT_FROM'], APP_NAME)
   layout "mailer"
 end
