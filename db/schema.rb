@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_12_151828) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_20_181719) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -127,7 +127,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_151828) do
   create_table "shops", force: :cascade do |t|
     t.string "name"
     t.text "description"
-    t.string "address", comment: "Custom address of shop."
     t.string "contact", comment: "Business contact number."
     t.integer "closing_days", default: [], null: false, comment: "In these days the shop is closed, starting from Monday:0", array: true
     t.string "social_links", default: [], array: true
@@ -139,6 +138,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_12_151828) do
     t.float "longitude"
     t.datetime "closing_time"
     t.datetime "opening_time"
+    t.jsonb "address", default: {}, comment: "Stores address in json as received from Google Map"
     t.index ["closing_days"], name: "index_shops_on_closing_days", using: :gin
     t.index ["seller_id"], name: "index_shops_on_seller_id"
     t.index ["social_links"], name: "index_shops_on_social_links", using: :gin
