@@ -61,3 +61,4 @@ gem 'cancancan', '~> 3.5'
 gem "sentry-ruby"
 gem "sentry-rails"
 gem 'haversine', '~> 0.3.2'
+gem 'mailgun_rails', '~> 0.9.0'
