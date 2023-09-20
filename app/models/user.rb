@@ -19,6 +19,7 @@ class User < ApplicationRecord
   has_many :favorites, through: :customer
 
   after_save :build_role_entity, unless: :role_entity_exist?
+  after_create :send_welcome_email
 
   delegate :can?, :cannot?, to: :ability
 
@@ -38,6 +39,10 @@ class User < ApplicationRecord
     def build_role_entity
       role_entity = role.camelize.constantize.new user: self
       role_entity.save validate: false
+    end
+
+    def send_welcome_email
+      UserMailer.with(user: self).welcome_email.deliver_later
     end
 
 end
