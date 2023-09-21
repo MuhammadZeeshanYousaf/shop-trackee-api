@@ -18,21 +18,31 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def search
-    query = params[:q]
-    shop_ids = ShopsNearMeService.call(*search_params.values)
-    @customer.record_history query
+    if params[:q].is_a? ActionDispatch::Http::UploadedFile
+      @history = @customer.search_histories.create(image: params[:q])
+      image_data = AwsService::ImageRecognition.call(@history.image.key)
+      @query = image_data.map { |label_data| label_data[:name] }
 
-    shops = Shop.where(id: shop_ids)
-    products = Product.where(shop_id: shops.ids).search_like(query)
-    services = Service.where(shop_id: shops.ids).search_like(query)
+    else @query = params[:q] end
 
-    generate_hashes(shops, products, services)
+    if @query.is_a?(String) || @query.is_a?(Array)
+      shop_ids = ShopsNearMeService.call(*search_params.values)
+      @history.present? ? @history.record_it(@query) : @customer.record_history(@query)
 
-    render json: {
-      shops: @shop_hashes,
-      products: @product_hashes,
-      services: @service_hashes
-    }
+      shops = Shop.where(id: shop_ids)
+      products = Product.where(shop_id: shops.ids).search_like(@query)
+      services = Service.where(shop_id: shops.ids).search_like(@query)
+
+      generate_hashes(shops, products, services)
+
+      render json: {
+        shops: @shop_hashes,
+        products: @product_hashes,
+        services: @service_hashes
+      }
+    else
+      render json: { message: 'Bad Request' }, status: :bad_request
+    end
   end
 
 
@@ -44,6 +54,7 @@ class Api::V1::CustomersController < ApplicationController
     end
 
     def search_params
+      # order of params strictly matters here
       params.permit(:distance, :latitude, :longitude)
     end
 
