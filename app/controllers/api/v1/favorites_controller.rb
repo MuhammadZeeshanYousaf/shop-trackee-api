@@ -4,7 +4,7 @@ class Api::V1::FavoritesController < ApplicationController
 
   # POST /favorites
   def create
-    if @customer.present? && @favoritable.present?
+    if @favoritable.present?
       @favorite = @customer.favorites.new(favoritable: @favoritable)
       if @favorite.save
         render json: @favorite, serializer: FavoriteSerializer, status: :created
@@ -21,7 +21,7 @@ class Api::V1::FavoritesController < ApplicationController
 
   # DELETE /favorites
   def destroy
-    if @customer.present? && @favoritable.present?
+    if @favoritable.present?
       @favorite = @customer.favorites.find_by favoritable: @favoritable
       if @favorite&.destroy
         render json: { message: 'Removed from Favorites successfully' }
@@ -35,6 +35,7 @@ class Api::V1::FavoritesController < ApplicationController
   private
     def set_customer
       @customer = current_devise_api_user.customer
+      @ability.authorize! :manage, @customer
     end
 
 
