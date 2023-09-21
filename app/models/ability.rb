@@ -8,6 +8,7 @@ class Ability
     can :update, User, user: user
 
     if user.role_customer?
+      can :manage, Customer
       can :read, Shop
 
     elsif user.role_seller?

@@ -19,8 +19,6 @@ class Api::V1::CustomersController < ApplicationController
 
   def search
     query = params[:q]
-    return render(json: { message: 'No record found' }, status: :not_found) if query.blank?
-
     shop_ids = ShopsNearMeService.call(*search_params.values)
 
     shops = Shop.where(id: shop_ids)
@@ -40,7 +38,7 @@ class Api::V1::CustomersController < ApplicationController
 
     def set_customer
       @customer = current_devise_api_user.customer
-      return render(json: { message: 'No record found' }, status: :not_found) unless @customer.present?
+      @ability.authorize! :manage, @customer
     end
 
     def search_params

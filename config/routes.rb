@@ -33,7 +33,10 @@ Rails.application.routes.draw do
         delete '/', to: 'favorites#destroy'
       end
 
-      get 'search_all', to: 'customers#search_all'
+      controller :customers do
+        get 'search_all'
+        get 'search'
+      end
 
     end
   end

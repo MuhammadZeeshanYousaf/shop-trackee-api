@@ -20,7 +20,7 @@ module TrackMyShopApi
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Handle cancancan exception CanCan::AccessDenied
-    # config.action_dispatch.rescue_responses.merge!('CanCan::AccessDenied' => :unauthorized)
+    config.action_dispatch.rescue_responses.merge!('CanCan::AccessDenied' => :unauthorized)
 
     # customize rails generator workflow
     config.generators do |g|
