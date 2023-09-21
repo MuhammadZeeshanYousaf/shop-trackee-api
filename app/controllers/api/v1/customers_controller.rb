@@ -20,6 +20,7 @@ class Api::V1::CustomersController < ApplicationController
   def search
     query = params[:q]
     shop_ids = ShopsNearMeService.call(*search_params.values)
+    @customer.record_history query
 
     shops = Shop.where(id: shop_ids)
     products = Product.where(shop_id: shops.ids).search_like(query)
@@ -33,6 +34,7 @@ class Api::V1::CustomersController < ApplicationController
       services: @service_hashes
     }
   end
+
 
   private
 

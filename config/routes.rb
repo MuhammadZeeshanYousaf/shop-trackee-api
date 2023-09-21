@@ -28,15 +28,20 @@ Rails.application.routes.draw do
         resources :services, concerns: :buildable
       end
 
-      scope 'favorites' do
-        post '/', to: "favorites#create"
-        delete '/', to: 'favorites#destroy'
+      scope 'favorites', controller: :favorites do
+        post '', action: :create
+        delete '', action: :destroy
       end
 
       controller :customers do
         get 'search_all'
         get 'search'
       end
+
+      scope 'customer', controller: :search_histories do
+        get 'history'
+      end
+      
 
     end
   end

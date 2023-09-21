@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_20_181719) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_21_121105) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -101,6 +101,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_181719) do
     t.index ["shop_id"], name: "index_products_on_shop_id"
   end
 
+  create_table "search_histories", force: :cascade do |t|
+    t.string "name", comment: "Customer Search History text"
+    t.bigint "customer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_search_histories_on_customer_id"
+  end
+
   create_table "sellers", force: :cascade do |t|
     t.text "intro", comment: "A short introduction for customers."
     t.integer "rating", default: 0
@@ -170,6 +178,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_20_181719) do
   add_foreign_key "favorites", "customers"
   add_foreign_key "products", "categories"
   add_foreign_key "products", "shops"
+  add_foreign_key "search_histories", "customers"
   add_foreign_key "sellers", "users"
   add_foreign_key "services", "categories"
   add_foreign_key "services", "shops"
