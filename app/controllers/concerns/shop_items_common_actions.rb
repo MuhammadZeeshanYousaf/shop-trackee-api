@@ -80,7 +80,7 @@ module ShopItemsCommonActions
         @objects = []
         # Generate objects
         image_data.each do |label_data|
-          category = Category.find_all_like(label_data[:categories]).first
+          category = Category.search_like(label_data[:categories]).first
           category = Category.create(name: label_data[:categories].first, category_type: @object.class.to_s) if category.blank?
           category = Category.first if label_data[:categories].blank?
           object = @object.class.new label_data.slice(:name, :description).merge(shop_id: @object.shop_id, category_id: category.id)
