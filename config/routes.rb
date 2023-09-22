@@ -34,8 +34,7 @@ Rails.application.routes.draw do
       end
 
       controller :customers do
-        get 'search_all'
-        get 'search'
+        get 'search_all', 'search', 'search_by_category'
       end
 
       scope 'customer', controller: :search_histories do

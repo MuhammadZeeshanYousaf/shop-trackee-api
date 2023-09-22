@@ -41,7 +41,36 @@ class Api::V1::CustomersController < ApplicationController
         services: @service_hashes
       }
     else
-      render json: { message: 'Bad Request' }, status: :bad_request
+      render json: { message: 'Invalid format for search query', error: 'Bad Request' }, status: :bad_request
+    end
+  end
+
+  def search_by_category
+    category_name = params[:q]
+    @category_ids = Category.where(name: category_name).ids
+    @category_ids = Category.search_like(category_name).ids if @category_ids.blank?
+
+    if @category_ids.present?
+      shop_ids = ShopsNearMeService.call(*search_params.values)
+      products = Product.where(shop_id: shop_ids, category_id: @category_ids)
+      services = Service.where(shop_id: shop_ids, category_id: @category_ids)
+      shop_ids = (products.pluck(:shop_id) + services.pluck(:shop_id)).uniq
+      shops = Shop.where(id: shop_ids)
+
+      generate_hashes(shops, products, services)
+
+      render json: {
+        shops: @shop_hashes,
+        products: @product_hashes,
+        services: @service_hashes
+      }
+    else
+      render json: {
+        message: 'Must provide category',
+        shops: [],
+        products: [],
+        services: []
+      }
     end
   end
 
