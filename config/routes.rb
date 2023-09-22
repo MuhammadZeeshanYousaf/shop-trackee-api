@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       end
 
       resource :user, only: :update
+      resources :categories, only: :index
       resources :shops do
         resources :products, concerns: :buildable
         resources :services, concerns: :buildable

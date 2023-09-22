@@ -5,5 +5,7 @@ class Category < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates :category_type, inclusion: { in: [ Product.to_s, Service.to_s ] }
+
+  default_scope { where("name <> NULL OR name <> ''") }
   
 end
