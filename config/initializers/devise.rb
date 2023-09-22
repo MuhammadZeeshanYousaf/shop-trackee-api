@@ -312,8 +312,8 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
   config.api.configure do |api|
     # Expiry of Access and Refresh Token
-    api.access_token.expires_in = 1.day
-    api.refresh_token.expires_in = 1.week
+    api.access_token.expires_in = 1.month
+    api.refresh_token.expires_in = 1.year
   end
 
 end
