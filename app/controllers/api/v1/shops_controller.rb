@@ -77,8 +77,8 @@ class Api::V1::ShopsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def shop_params
-      params.permit :name, :description, :address, :contact, :latitude, :longitude,
-                    :opening_time, :closing_time, :shop_website_url, closing_days: [], social_links: []
+      params.permit :name, :description, :contact, :latitude, :longitude,
+                    :opening_time, :closing_time, :shop_website_url, closing_days: [], social_links: [], address: {}
     end
 
 end
