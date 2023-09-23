@@ -10,6 +10,6 @@ class Shop < ApplicationRecord
   belongs_to :seller
   has_many :products
   has_many :services
-  has_many :order_requests
+  has_many :order_requests, dependent: :destroy
 
 end
