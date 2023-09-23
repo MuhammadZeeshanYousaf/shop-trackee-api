@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_21_121105) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_23_094506) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -85,6 +85,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_121105) do
     t.datetime "updated_at", null: false
     t.index ["customer_id"], name: "index_favorites_on_customer_id"
     t.index ["favoritable_id", "favoritable_type"], name: "index_favorites_on_favoritable_id_and_favoritable_type"
+  end
+
+  create_table "order_requests", force: :cascade do |t|
+    t.integer "status", default: 0
+    t.string "message"
+    t.bigint "customer_id", null: false
+    t.bigint "shop_id"
+    t.string "orderable_type"
+    t.bigint "orderable_id"
+    t.string "removed_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_order_requests_on_customer_id"
+    t.index ["orderable_type", "orderable_id"], name: "index_order_requests_on_orderable"
+    t.index ["shop_id"], name: "index_order_requests_on_shop_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -176,6 +191,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_121105) do
   add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "customers", "users"
   add_foreign_key "favorites", "customers"
+  add_foreign_key "order_requests", "customers"
   add_foreign_key "products", "categories"
   add_foreign_key "products", "shops"
   add_foreign_key "search_histories", "customers"

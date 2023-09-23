@@ -2,6 +2,7 @@ class Customer < ApplicationRecord
   belongs_to :user
   has_many :favorites
   has_many :search_histories
+  has_many :order_requests
 
   validates :age, numericality: { greater_than: 5, less_than: 100 }
 
