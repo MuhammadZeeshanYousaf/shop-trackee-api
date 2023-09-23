@@ -12,6 +12,7 @@ class Ability
       can :read, Shop
 
     elsif user.role_seller?
+      can :manage, Seller
       can :manage, Shop, seller: user.seller
 
     end

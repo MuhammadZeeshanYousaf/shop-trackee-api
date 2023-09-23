@@ -38,6 +38,10 @@ Rails.application.routes.draw do
         get 'search_all', 'search', 'search_by_category'
       end
 
+      scope 'seller', controller: :sellers do
+        get 'stats'
+      end
+
       scope 'customer', controller: :search_histories do
         get 'history'
       end
