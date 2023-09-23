@@ -1,5 +1,5 @@
 class Api::V1::OrderRequestsController < ApplicationController
-  before_action :set_role_objects, only: [ :create, :index, :destroy ]
+  before_action :set_role_objects
   before_action :set_orderable, only: :create
   before_action :set_order_request, only: [ :destroy, :update ]
 
@@ -30,11 +30,18 @@ class Api::V1::OrderRequestsController < ApplicationController
     end
   end
 
+  # PUT/PATCH customer/order_requests/:id
   def update
+    @ability.authorize! :update, @order_request
 
+    if @order_request.pending? && @order_request.update(order_request_params)
+      return render json: { message: 'Order request message updated successfully', order_request: OrderRequestSerializer.new(@order_request).serializable_hash }
+    end
+
+    render json: { message: 'Order request message cannot be updated', error: @order_request&.errors&.full_messages&.to_sentence }, status: :forbidden
   end
 
-  # DELETE customer/order_requests
+  # DELETE customer/order_requests/:id
   def destroy
     @ability.authorize! :destroy, @order_request
 
