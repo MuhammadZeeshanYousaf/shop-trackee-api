@@ -10,10 +10,12 @@ class Ability
     if user.role_customer?
       can :manage, Customer
       can :read, Shop
+      can :manage, OrderRequest, customer: user.customer
 
     elsif user.role_seller?
       can :manage, Seller
       can :manage, Shop, seller: user.seller
+      can :read, OrderRequest
 
     end
 

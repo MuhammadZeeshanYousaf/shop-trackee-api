@@ -42,9 +42,11 @@ Rails.application.routes.draw do
         get 'stats'
       end
 
-      scope 'customer', controller: :search_histories do
-        get 'history'
+      scope 'customer' do
+        get 'history', controller: :search_histories
+        resources :order_requests, except: :index
       end
+      resources :order_requests, only: :index
       
 
     end
