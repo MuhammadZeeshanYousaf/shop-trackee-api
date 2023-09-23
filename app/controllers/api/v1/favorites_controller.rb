@@ -2,6 +2,10 @@ class Api::V1::FavoritesController < ApplicationController
   before_action :set_customer
   before_action :set_favoritable, only: [ :create, :destroy ]
 
+  def index
+    render json: @customer.favorites, each_serializer: FavoriteSerializer
+  end
+
   # POST /favorites
   def create
     if @favoritable.present?

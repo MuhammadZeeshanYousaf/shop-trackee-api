@@ -29,9 +29,8 @@ Rails.application.routes.draw do
         resources :services, concerns: :buildable
       end
 
-      scope 'favorites', controller: :favorites do
-        post '', action: :create
-        delete '', action: :destroy
+      resources :favorites, only: [:index, :create] do
+        delete :destroy, on: :collection
       end
 
       controller :customers do

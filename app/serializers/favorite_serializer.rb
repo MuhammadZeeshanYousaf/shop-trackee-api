@@ -1,4 +1,4 @@
 class FavoriteSerializer < ActiveModel::Serializer
-  attributes :id
+  attributes :id, :favoritable_type
   has_one :favoritable
 end
