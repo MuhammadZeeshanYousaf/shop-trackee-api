@@ -43,6 +43,7 @@ class Api::V1::ProductsController < ApplicationController
 
   # PATCH/PUT /products/1
   def update
+    @product.category = Category.find_by_name params[:category_name]
     if @product&.update(product_params)
       render json: {
         message: "Product '#{@product.name}' updated successfully",

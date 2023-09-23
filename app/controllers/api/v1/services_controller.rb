@@ -46,6 +46,7 @@ class Api::V1::ServicesController < ApplicationController
 
   # PATCH/PUT /services/1
   def update
+    @service.category = Category.find_by_name params[:category_name]
     if @service&.update(service_params)
       render json: {
         message: "Service '#{@service.name}' updated successfully",
