@@ -42,7 +42,7 @@ class Api::V1::OrderRequestsController < ApplicationController
       return render json: { message: 'Order request cancelled successfully' }
     end
 
-    render json: { message: 'Order request cannot be cancelled', error: @order_request&.errors&.full_messages&.to_sentence }
+    render json: { message: 'Order request cannot be cancelled', error: @order_request&.errors&.full_messages&.to_sentence }, status: :unprocessable_entity
   end
 
 
