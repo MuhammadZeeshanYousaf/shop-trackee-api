@@ -46,7 +46,12 @@ Rails.application.routes.draw do
         get 'history', controller: :search_histories
         resources :order_requests, except: :index
       end
-      resources :order_requests, only: :index
+
+      resources :order_requests, only: :index do
+        scope 'seller' do
+          patch ':status', action: 'update_status', on: :member
+        end
+      end
       
 
     end

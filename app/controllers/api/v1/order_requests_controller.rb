@@ -1,7 +1,8 @@
 class Api::V1::OrderRequestsController < ApplicationController
   before_action :set_role_objects
   before_action :set_orderable, only: :create
-  before_action :set_order_request, only: [ :destroy, :update ]
+  before_action :set_customer_order_request, only: [ :destroy, :update ]
+  before_action :set_seller_order_request, only: :update_status
 
   # GET /order_requests
   def index
@@ -52,6 +53,19 @@ class Api::V1::OrderRequestsController < ApplicationController
     render json: { message: 'Order request cannot be cancelled', error: @order_request&.errors&.full_messages&.to_sentence }, status: :unprocessable_entity
   end
 
+  def update_status
+    if params[:status].eql?('accept') && @order_request&.accepted!
+      render json: { message: 'Order request accepted', order_request: OrderRequestSerializer.new(@order_request).serializable_hash }
+
+    elsif params[:status].eql?('reject') && @order_request&.rejected!
+      render json: { message: 'Order request rejected', order_request: OrderRequestSerializer.new(@order_request).serializable_hash }
+
+    else
+      render json: { message: 'Order request cannot be accepted / rejected', error: @order_request&.errors&.full_messages&.to_sentence }, status: :bad_request
+
+    end
+  end
+
 
   private
     def set_role_objects
@@ -65,9 +79,14 @@ class Api::V1::OrderRequestsController < ApplicationController
       end
     end
 
-    def set_order_request
+    def set_customer_order_request
       @ability.authorize! :manage, @customer
       @order_request = @customer.order_requests.find_by_id params[:id]
+    end
+
+    def set_seller_order_request
+      @ability.authorize! :manage, @seller
+      @order_request = @seller.order_requests.find_by_id params[:id]
     end
 
     def order_request_params
