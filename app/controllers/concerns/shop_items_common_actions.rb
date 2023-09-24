@@ -14,10 +14,20 @@ module ShopItemsCommonActions
 
   # PUT /objects/(:id)/images
   def create_or_upload
-    if @object.persisted?
-      @object.images.attach(params[:images])
-    else
-      @object = @shop.send(@object.class.to_s.underscore.pluralize).new(images: params[:images])
+    return head :bad_request if params[:images].empty?
+    images = params[:images]
+
+    unless @object.persisted?
+      @object = @shop.send(@object.class.to_s.underscore.pluralize).new
+    end
+
+    images.each do |img|
+      if img.is_a? String
+        # The img is Base64 and coming from the camera
+        @object.images.attach Base64ToHash::convert(img)
+      else
+        @object.images.attach(img)
+      end
     end
     @object.category ||= Category.where(category_type: @object.class.to_s).first
 
