@@ -24,7 +24,7 @@ module ShopItemsCommonActions
     images.each do |img|
       if img.is_a? String
         # The img is Base64 and coming from the camera
-        @object.images.attach Base64ToHash::convert(img)
+        @object.images.attach Base64ImgToHash.call(img)
       else
         @object.images.attach(img)
       end
