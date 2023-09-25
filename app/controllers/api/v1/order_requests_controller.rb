@@ -66,6 +66,29 @@ class Api::V1::OrderRequestsController < ApplicationController
     end
   end
 
+  def remove
+    if request.path.include?(Customer.to_s.underscore) && @ability.can?(:manage, @customer)
+      @order_request = @customer.order_requests.find_by_id params[:id]
+      @removed_by = Customer.to_s.underscore
+
+    elsif request.path.include?(Seller.to_s.underscore) && @ability.can?(:manage, @seller)
+      @order_request = @seller.order_requests.find_by_id params[:id]
+      @removed_by = Seller.to_s.underscore
+
+    else
+      @ability.authorize! :destroy, nil
+    end
+
+
+    if @order_request.present? && @order_request.removed_by.blank?
+      return render json: { message: 'Order Request removed successfully' } if @order_request.update_attribute :removed_by, @removed_by
+    elsif User.roles.values.include?(@order_request.try(:removed_by))
+      return render json: { message: 'Order Request removed successfully' } if @order_request.destroy
+    end
+
+    render json: { message: 'Order Request not found' }, status: :not_found
+  end
+
 
   private
     def set_role_objects

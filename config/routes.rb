@@ -43,12 +43,15 @@ Rails.application.routes.draw do
 
       scope 'customer' do
         get 'history', controller: :search_histories
-        resources :order_requests, except: :index
+        resources :order_requests, except: :index do
+          delete 'remove', on: :member
+        end
       end
 
       resources :order_requests, only: :index do
         scope 'seller' do
           patch ':status', action: 'update_status', on: :member
+          delete 'remove', on: :member
         end
       end
       
