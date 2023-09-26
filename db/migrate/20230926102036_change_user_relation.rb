@@ -37,10 +37,12 @@ class ChangeUserRelation < ActiveRecord::Migration[7.0]
     add_reference :customers, :user
 
     User.find_each do |user|
-      user.update_column :role, user.role_type.underscore
+      if user.role_type.present?
+        user.update_column :role, user.role_type.underscore
 
-      role_item = user.role_type.camelize.constantize.find(user.role_id)
-      role_item.update_attribute :user_id, user.id
+        role_item = user.role_type.camelize.constantize.find(user.role_id)
+        role_item.update_attribute :user_id, user.id
+      end
     end
 
     remove_reference :users, :role, polymorphic: true
