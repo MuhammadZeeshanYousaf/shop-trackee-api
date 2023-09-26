@@ -13,7 +13,7 @@ module ImagePathHelper
     if object.images.attached?
       object.images.map do |image|
         { id: image.id,
-          path: path_for(image)
+          path: path_for(image.variant(:short))
         }
       end
     else []
