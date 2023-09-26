@@ -1,5 +1,5 @@
 class Customer < ApplicationRecord
-  belongs_to :user
+  has_one :user, as: :role
   has_many :favorites
   has_many :search_histories
   has_many :order_requests, -> { where("removed_by != 'customer' OR removed_by IS NULL") }

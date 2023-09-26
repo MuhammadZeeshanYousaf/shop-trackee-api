@@ -1,5 +1,5 @@
 class Seller < ApplicationRecord
-  belongs_to :user
+  has_one :user, as: :role
   has_many :shops
   has_many :products, through: :shops
   has_many :services, through: :shops

@@ -7,14 +7,14 @@ class Ability
     return unless user.present?
     can :update, User, user: user
 
-    if user.role_customer?
+    if user.customer?
       can :manage, Customer
       can :read, Shop
-      can :manage, OrderRequest, customer: user.customer
+      can :manage, OrderRequest, role: user.customer
 
-    elsif user.role_seller?
+    elsif user.seller?
       can :manage, Seller
-      can :manage, Shop, seller: user.seller
+      can :manage, Shop, role: user.seller
       can :read, OrderRequest
 
     end
