@@ -23,6 +23,13 @@ class Api::V1::CustomersController < ApplicationController
       image_data = AwsService::ImageRecognition.call(@history.image.key)
       @query = image_data.map { |label_data| label_data[:name] }
 
+    elsif params[:q].match(/\Adata:image\/\w+;base64,/).present?
+      @history = @customer.search_histories.new
+      @history.image.attach Base64ImgToHash.call(params[:q])
+      @history.save
+      image_data = AwsService::ImageRecognition.call(@history.image.key)
+      @query = image_data.map { |label_data| label_data[:name] }
+
     else @query = params[:q] end
 
     if @query.is_a?(String) || @query.is_a?(Array)
