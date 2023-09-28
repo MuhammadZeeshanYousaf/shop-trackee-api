@@ -57,11 +57,11 @@ module AwsService
             accum << category.name
           end
           categories_sentence = label_categories.to_sentence
-          categories_desc = categories_sentence.present? ? "It could be categorized as #{categories_sentence}. " : ''
+          categories_desc = categories_sentence.present? ? ", which could be categorized as #{categories_sentence}. " : ''
 
           # object aliases
           label_aliases = label.aliases.reduce([]) do |accum, label_alias|
-            accum << label_alias&.values
+            accum << label_alias&.name
           end.to_sentence
           aliases_desc = label_aliases.present? ? "It can be identified as #{label_aliases} " : ''
 
