@@ -34,7 +34,8 @@ Rails.application.routes.draw do
       end
 
       controller :customers do
-        get 'search_all', 'search', 'search_by_category'
+        get 'search_all', 'search_by_category'
+        match 'search', via: [:get, :post]
       end
 
       scope 'seller', controller: :sellers do
