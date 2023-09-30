@@ -9,4 +9,6 @@ class OrderRequest < ApplicationRecord
   scope :removed_by_customer, -> { where(removed_by: 'customer') }
   scope :removed_by_seller, -> { where(removed_by: 'seller') }
 
+  delegate :price, to: :orderable, prefix: true
+
 end

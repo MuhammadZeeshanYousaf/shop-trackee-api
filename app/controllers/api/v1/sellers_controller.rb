@@ -4,8 +4,8 @@ class Api::V1::SellersController < ApplicationController
   def stats
     products_count = @seller.products.count
     services_count = @seller.services.count
-    customers_count = 0
-    total_revenue = 0
+    customers_count = @seller.satisfied_customers_count
+    total_revenue = @seller.total_revenue
 
     render json: {
       customers: customers_count,
