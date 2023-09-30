@@ -13,4 +13,21 @@ class Shop < ApplicationRecord
   has_many :services
   has_many :order_requests, dependent: :destroy
 
+
+  def products_count
+    products.count
+  end
+
+  def services_count
+    services.count
+  end
+
+  def order_requests_count
+    order_requests.count
+  end
+
+  def orders_count
+    order_requests.where(status: 'accepted').count
+  end
+
 end
