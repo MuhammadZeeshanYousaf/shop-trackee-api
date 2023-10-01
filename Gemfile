@@ -47,6 +47,7 @@ end
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem 'rails-erd', '~> 1.7', '>= 1.7.2'
 end
 
 # My App Gems
