@@ -9,6 +9,7 @@ class Seller < ApplicationRecord
 
   attribute :rating, :integer
   validates :rating, numericality: { less_than_or_equal_to: 5 }
+  before_validation { self.rating = 3 }
 
   def satisfied_customers_count
     accepted_order_requests.pluck(:customer_id).uniq.count
