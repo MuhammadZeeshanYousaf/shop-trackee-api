@@ -47,7 +47,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def seller_params
-    params.permit(:intro, :rating)
+    params.permit(:intro)
   end
 
   def set_user
