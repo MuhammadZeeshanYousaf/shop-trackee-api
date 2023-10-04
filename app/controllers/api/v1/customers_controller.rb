@@ -43,8 +43,8 @@ class Api::V1::CustomersController < ApplicationController
 
     else
       @shops = Shop.where(id: shop_ids).page(params[:page])
-      @products = Product.where(shop_id: shops.ids).page(params[:page])
-      @services = Service.where(shop_id: shops.ids).page(params[:page])
+      @products = Product.where(shop_id: @shops.ids).page(params[:page])
+      @services = Service.where(shop_id: @shops.ids).page(params[:page])
 
     end
 

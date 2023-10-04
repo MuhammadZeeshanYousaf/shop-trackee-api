@@ -50,7 +50,7 @@ class Api::V1::ServicesController < ApplicationController
     if @service&.update(service_params)
       render json: {
         message: "Service '#{@service.name}' updated successfully",
-        product: ServiceSerializer.new(@service).serializable_hash
+        service: ServiceSerializer.new(@service).serializable_hash
       }
     else
       render json: {
