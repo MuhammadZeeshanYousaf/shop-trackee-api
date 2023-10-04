@@ -30,25 +30,25 @@ class Api::V1::CustomersController < ApplicationController
 
   def search_all
     type = params[:type]
-    products_page = params[:product_page]
-    services_page = params[:service_page]
-    shops_page    = params[:shop_page]
+    product_page = params[:product_page]
+    service_page = params[:service_page]
+    shop_page    = params[:shop_page]
     shop_ids = ShopsNearMeService.call(*search_params.values)
 
     if type.present? && type.camelize.eql?(Product.to_s)
-      @products = Product.where(shop_id: shop_ids).page(products_page)
+      @products = Product.where(shop_id: shop_ids).page(product_page)
       @shops = Shop.where(id: @products.pluck(:shop_id))
       @services = []
 
     elsif type.present? && type.camelize.eql?(Service.to_s)
-      @services = Service.where(shop_id: shop_ids).page(services_page)
+      @services = Service.where(shop_id: shop_ids).page(service_page)
       @shops = Shop.where(id: @services.pluck(:shop_id))
       @products = []
 
     else
-      @shops = Shop.where(id: shop_ids).page(shops_page)
-      @products = Product.where(shop_id: @shops.ids).page(products_page)
-      @services = Service.where(shop_id: @shops.ids).page(services_page)
+      @shops = Shop.where(id: shop_ids).page(shop_page)
+      @products = Product.where(shop_id: @shops.ids).page(product_page)
+      @services = Service.where(shop_id: @shops.ids).page(service_page)
 
     end
 
@@ -66,20 +66,20 @@ class Api::V1::CustomersController < ApplicationController
         data: @service_hashes
       },
       shop: {
-        current_page: @services.try(:current_page),
-        total_pages: @services.try(:total_pages),
+        current_page: @shops.try(:current_page),
+        total_pages: @shops.try(:total_pages),
         data: @shop_hashes
       }
     }
   end
 
   def search
-    if params[:q].is_a? ActionDispatch::Http::UploadedFile
+    if request.post? && params[:q].is_a?(ActionDispatch::Http::UploadedFile)
       @history = @customer.search_histories.create(image: params[:q])
       image_data = AwsService::ImageRecognition.call(@history.image.key)
       @query = image_data.map { |label_data| label_data[:name] }
 
-    elsif params[:q].match(/\Adata:image\/\w+;base64,/).present?
+    elsif request.post? && params[:q].match(/\Adata:image\/\w+;base64,/).present?
       @history = @customer.search_histories.new
       @history.image.attach Base64ImgToHash.call(params[:q])
       @history.save
@@ -109,33 +109,58 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def search_by_category
+    type = params[:type]
     category_name = params[:q]
+    product_page  = params[:product_page]
+    service_page  = params[:service_page]
+    shop_page     = params[:shop_page]
+
     @category_ids = Category.where(name: category_name).ids
     @category_ids = Category.search_like(category_name).ids if @category_ids.blank?
 
     if @category_ids.present?
       shop_ids = ShopsNearMeService.call(*search_params.values)
 
-      products = Product.where(shop_id: shop_ids, category_id: @category_ids).page(params[:page])
-      services = Service.where(shop_id: shop_ids, category_id: @category_ids).page(params[:page])
-      shop_ids = (products.pluck(:shop_id) + services.pluck(:shop_id)).uniq
-      shops = Shop.where(id: shop_ids)
+      if type.present? && type.camelize.eql?(Product.to_s)
+        @products = Product.where(shop_id: shop_ids, category_id: @category_ids).page(product_page)
+        @shops = Shop.where(id: @products.pluck(:shop_id))
+        @services = []
 
-      generate_hashes(shops, products, services)
+      elsif type.present? && type.camelize.eql?(Service.to_s)
+        @services = Service.where(shop_id: shop_ids, category_id: @category_ids).page(service_page)
+        @shops = Shop.where(id: @services.pluck(:shop_id))
+        @products = []
 
-      render json: {
-        shops: @shop_hashes,
-        products: @product_hashes,
-        services: @service_hashes
-      }
+      else
+        @products = Product.where(shop_id: shop_ids, category_id: @category_ids).page(product_page)
+        @services = Service.where(shop_id: shop_ids, category_id: @category_ids).page(service_page)
+        shop_ids = (@products.pluck(:shop_id) + @services.pluck(:shop_id)).uniq
+        @shops = Shop.where(id: shop_ids).page(shop_page)
+
+      end
+
+      generate_hashes(@shops, @products, @services)
     else
-      render json: {
-        message: 'Must provide category',
-        shops: [],
-        products: [],
-        services: []
-      }
+      return render json: { error: 'Must provide valid category name!' }, status: :bad_request
     end
+
+    render json: {
+      product: {
+        current_page: @products.try(:current_page),
+        total_pages: @products.try(:total_pages),
+        data: @product_hashes,
+      },
+      service: {
+        current_page: @services.try(:current_page),
+        total_pages: @services.try(:total_pages),
+        data: @service_hashes
+      },
+      shop: {
+        current_page: @shops.try(:current_page),
+        total_pages: @shops.try(:total_pages),
+        data: @shop_hashes
+      }
+    }
   end
 
 
