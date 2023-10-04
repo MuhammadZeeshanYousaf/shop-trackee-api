@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       end
 
       scope 'customer' do
+        get 'home', controller: :customers
         get 'history', controller: :search_histories
         resources :order_requests, except: :index do
           delete 'remove', on: :member

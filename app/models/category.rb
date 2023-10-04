@@ -7,5 +7,7 @@ class Category < ApplicationRecord
   validates :category_type, inclusion: { in: [ Product.to_s, Service.to_s ] }
 
   default_scope { where("name <> NULL OR name <> ''") }
+  scope :product_type, -> { where category_type: Product.to_s }
+  scope :service_type, -> { where category_type: Service.to_s }
   
 end

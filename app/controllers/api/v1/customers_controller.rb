@@ -1,6 +1,33 @@
 class Api::V1::CustomersController < ApplicationController
   before_action :set_customer
 
+
+  def home
+    shop_ids = ShopsNearMeService.call(*search_params.values)
+
+    # shops = Shop.where(id: shop_ids)
+    products = Product.where(shop_id: shop_ids)
+    services = Service.where(shop_id: shop_ids)
+
+    generate_hashes([], products, services)
+    @product_categories = Category.service_type.pluck :name
+    @service_categories = Category.product_type.pluck :name
+
+
+    render json: {
+      product: {
+        categories: @product_categories,
+        data: @product_hashes
+      },
+      service: {
+        categories: @service_categories,
+        data: @service_hashes
+      },
+      # shops: @shop_hashes
+    }
+
+  end
+
   def search_all
     shop_ids = ShopsNearMeService.call(*search_params.values)
 
