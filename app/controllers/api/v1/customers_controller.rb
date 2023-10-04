@@ -29,31 +29,47 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def search_all
+    type = params[:type]
+    products_page = params[:product_page]
+    services_page = params[:service_page]
+    shops_page    = params[:shop_page]
     shop_ids = ShopsNearMeService.call(*search_params.values)
 
-    if params[:type].present? && params[:type].camelize.eql?(Product.to_s)
-      @products = Product.where(shop_id: shop_ids).page(params[:page])
-      @shops = Shop.where(id: @products.pluck(:shop_id)).page(params[:page])
+    if type.present? && type.camelize.eql?(Product.to_s)
+      @products = Product.where(shop_id: shop_ids).page(products_page)
+      @shops = Shop.where(id: @products.pluck(:shop_id))
       @services = []
 
-    elsif params[:type].present? && params[:type].camelize.eql?(Service.to_s)
-      @services = Service.where(shop_id: shop_ids).page(params[:page])
-      @shops = Shop.where(id: @services.pluck(:shop_id)).page(params[:page])
+    elsif type.present? && type.camelize.eql?(Service.to_s)
+      @services = Service.where(shop_id: shop_ids).page(services_page)
+      @shops = Shop.where(id: @services.pluck(:shop_id))
       @products = []
 
     else
-      @shops = Shop.where(id: shop_ids).page(params[:page])
-      @products = Product.where(shop_id: @shops.ids).page(params[:page])
-      @services = Service.where(shop_id: @shops.ids).page(params[:page])
+      @shops = Shop.where(id: shop_ids).page(shops_page)
+      @products = Product.where(shop_id: @shops.ids).page(products_page)
+      @services = Service.where(shop_id: @shops.ids).page(services_page)
 
     end
 
     generate_hashes(@shops, @products, @services)
 
     render json: {
-      shops: @shop_hashes,
-      products: @product_hashes,
-      services: @service_hashes
+      product: {
+        current_page: @products.try(:current_page),
+        total_pages: @products.try(:total_pages),
+        data: @product_hashes,
+      },
+      service: {
+        current_page: @services.try(:current_page),
+        total_pages: @services.try(:total_pages),
+        data: @service_hashes
+      },
+      shop: {
+        current_page: @services.try(:current_page),
+        total_pages: @services.try(:total_pages),
+        data: @shop_hashes
+      }
     }
   end
 
