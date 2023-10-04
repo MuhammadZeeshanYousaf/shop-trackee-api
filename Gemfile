@@ -63,3 +63,4 @@ gem "sentry-ruby"
 gem "sentry-rails"
 gem 'haversine', '~> 0.3.2'
 gem 'mailjet', '~> 1.7', '>= 1.7.3'
+gem 'kaminari', '~> 1.2', '>= 1.2.2'

@@ -173,6 +173,18 @@ GEM
       reline (>= 0.3.6)
     jmespath (1.6.2)
     jsonapi-renderer (0.2.2)
+    kaminari (1.2.2)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.2)
+      kaminari-activerecord (= 1.2.2)
+      kaminari-core (= 1.2.2)
+    kaminari-actionview (1.2.2)
+      actionview
+      kaminari-core (= 1.2.2)
+    kaminari-activerecord (1.2.2)
+      activerecord
+      kaminari-core (= 1.2.2)
+    kaminari-core (1.2.2)
     loofah (2.21.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -319,6 +331,7 @@ DEPENDENCIES
   dotenv-rails
   haversine (~> 0.3.2)
   image_processing (~> 1.2)
+  kaminari (~> 1.2, >= 1.2.2)
   mailjet (~> 1.7, >= 1.7.3)
   pg (~> 1.1)
   puma (~> 5.0)

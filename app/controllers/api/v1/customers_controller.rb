@@ -31,11 +31,24 @@ class Api::V1::CustomersController < ApplicationController
   def search_all
     shop_ids = ShopsNearMeService.call(*search_params.values)
 
-    shops = Shop.where(id: shop_ids)
-    products = Product.where(shop_id: shops.ids)
-    services = Service.where(shop_id: shops.ids)
+    if params[:type].present? && params[:type].camelize.eql?(Product.to_s)
+      @products = Product.where(shop_id: shop_ids).page(params[:page])
+      @shops = Shop.where(id: @products.pluck(:shop_id)).page(params[:page])
+      @services = []
 
-    generate_hashes(shops, products, services)
+    elsif params[:type].present? && params[:type].camelize.eql?(Service.to_s)
+      @services = Service.where(shop_id: shop_ids).page(params[:page])
+      @shops = Shop.where(id: @services.pluck(:shop_id)).page(params[:page])
+      @products = []
+
+    else
+      @shops = Shop.where(id: shop_ids).page(params[:page])
+      @products = Product.where(shop_id: shops.ids).page(params[:page])
+      @services = Service.where(shop_id: shops.ids).page(params[:page])
+
+    end
+
+    generate_hashes(@shops, @products, @services)
 
     render json: {
       shops: @shop_hashes,

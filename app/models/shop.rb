@@ -4,6 +4,7 @@ class Shop < ApplicationRecord
                              'Thursday' => 3, 'Friday' => 4, 'Saturday' => 5, 'Sunday' => 6 }
 
   default_scope { order(:created_at) }
+  paginates_per 5
   validates :closing_days, subset: closing_days.keys
   validates :name, uniqueness: { scope: :seller }
   # validates :latitude, :longitude, presence: true

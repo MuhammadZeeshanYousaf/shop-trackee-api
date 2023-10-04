@@ -1,6 +1,8 @@
 class Service < ApplicationRecord
   include ShopItemsModifiable
   include NameSearchable
+  paginates_per 6
+  max_pages 100
 
   belongs_to :shop
   belongs_to :category
