@@ -99,8 +99,9 @@ class Api::V1::CustomersController < ApplicationController
 
     if @category_ids.present?
       shop_ids = ShopsNearMeService.call(*search_params.values)
-      products = Product.where(shop_id: shop_ids, category_id: @category_ids)
-      services = Service.where(shop_id: shop_ids, category_id: @category_ids)
+
+      products = Product.where(shop_id: shop_ids, category_id: @category_ids).page(params[:page])
+      services = Service.where(shop_id: shop_ids, category_id: @category_ids).page(params[:page])
       shop_ids = (products.pluck(:shop_id) + services.pluck(:shop_id)).uniq
       shops = Shop.where(id: shop_ids)
 
