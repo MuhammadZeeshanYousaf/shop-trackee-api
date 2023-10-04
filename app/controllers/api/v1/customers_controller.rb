@@ -6,8 +6,8 @@ class Api::V1::CustomersController < ApplicationController
     shop_ids = ShopsNearMeService.call(*search_params.values)
 
     # shops = Shop.where(id: shop_ids)
-    products = Product.where(shop_id: shop_ids)
-    services = Service.where(shop_id: shop_ids)
+    products = Product.where(shop_id: shop_ids).page
+    services = Service.where(shop_id: shop_ids).page
 
     generate_hashes([], products, services)
     @product_categories = Category.service_type.pluck :name
