@@ -141,7 +141,7 @@ class Api::V1::CustomersController < ApplicationController
 
       generate_hashes(@shops, @products, @services)
     else
-      return render json: { error: 'Must provide valid category name!' }, status: :bad_request
+      return render json: { message: 'Must provide valid category name', error: 'Bad Request' }, status: :bad_request
     end
 
     render json: {
