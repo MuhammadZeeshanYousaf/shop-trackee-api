@@ -10,9 +10,8 @@ class Api::V1::CustomersController < ApplicationController
     services = Service.where(shop_id: shop_ids).page
 
     generate_hashes([], products, services)
-    @product_categories = Category.service_type.pluck :name
-    @service_categories = Category.product_type.pluck :name
-
+    @service_categories = Category.service_type.pluck :name
+    @product_categories = Category.product_type.pluck :name
 
     render json: {
       product: {
