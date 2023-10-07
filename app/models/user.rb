@@ -12,7 +12,7 @@ class User < ApplicationRecord
   alias_attribute :role_name, :role_type
   has_many :favorites, through: :role
 
-  after_save :build_role, unless: :role_exists?
+  after_save :build_role, if: :role_blank?
   after_create :send_welcome_email
 
   delegate :can?, :cannot?, to: :ability
@@ -38,8 +38,8 @@ class User < ApplicationRecord
     role_type.camelize == Seller.to_s
   end
 
-  def role_exists?
-    role_id.present?
+  def role_blank?
+    role_id.blank?
   end
 
   def build_role
