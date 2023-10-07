@@ -47,7 +47,7 @@ class Api::V1::OrderRequestsController < ApplicationController
     @ability.authorize! :destroy, @order_request
 
     if @order_request.pending? && @order_request.destroy
-      return render json: { message: 'Order request cancelled successfully' }
+      return render json: { message: 'Order request cancelled successfully' }, status: :no_content
     end
 
     render json: { message: 'Order request was not cancelled', error: @order_request&.errors&.full_messages&.to_sentence }, status: :unprocessable_entity
@@ -81,9 +81,9 @@ class Api::V1::OrderRequestsController < ApplicationController
 
 
     if @order_request.present? && @order_request.removed_by.blank?
-      return render json: { message: 'Order Request removed successfully' } if @order_request.update_attribute :removed_by, @removed_by
+      return render json: { message: 'Order Request removed successfully' }, status: :no_content if @order_request.update_attribute :removed_by, @removed_by
     elsif User.roles.values.include?(@order_request.try(:removed_by))
-      return render json: { message: 'Order Request removed successfully' } if @order_request.destroy
+      return render json: { message: 'Order Request removed successfully' }, status: :no_content if @order_request.destroy
     end
 
     render json: { message: 'Order Request not found' }, status: :not_found
