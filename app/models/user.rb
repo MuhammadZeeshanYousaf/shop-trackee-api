@@ -12,13 +12,12 @@ class User < ApplicationRecord
     seller: 'seller',
     customer: 'customer'
   }, prefix: true
-  validates :role, presence: true, inclusion: { in: roles.values }
 
   has_one :customer
   has_one :seller
   has_many :favorites, through: :customer
 
-  after_save :build_role_entity, unless: :role_entity_exist?
+  after_save :build_role_entity, if: :role_entity_blank?
   after_create :send_welcome_email
 
   delegate :can?, :cannot?, to: :ability
@@ -27,11 +26,11 @@ class User < ApplicationRecord
     @ability ||= Ability.new(self)
   end
 
-  def role_entity_exist?
+  def role_entity_blank?
     if role_seller?
-      seller.present?
+      seller.blank?
     elsif role_customer?
-      customer.present?
+      customer.blank?
     end
   end
 
