@@ -20,12 +20,12 @@ class Api::V1::OrderRequestsController < ApplicationController
 
     if @order_request.save
       render json: {
-        message: 'Order request created',
+        message: 'Order request sent',
         order_request: OrderRequestSerializer.new(@order_request).serializable_hash(except: :customer)
       }, status: :created
     else
       render json: {
-        message: 'Order request cannot be created',
+        message: 'Order request was not sent',
         error: @order_request.errors.full_messages.to_sentence
       }
     end
@@ -39,7 +39,7 @@ class Api::V1::OrderRequestsController < ApplicationController
       return render json: { message: 'Order request message updated successfully', order_request: OrderRequestSerializer.new(@order_request).serializable_hash }
     end
 
-    render json: { message: 'Order request message cannot be updated', error: @order_request&.errors&.full_messages&.to_sentence }, status: :forbidden
+    render json: { message: 'Order request message was not updated', error: @order_request&.errors&.full_messages&.to_sentence }, status: :forbidden
   end
 
   # DELETE customer/order_requests/:id
@@ -50,7 +50,7 @@ class Api::V1::OrderRequestsController < ApplicationController
       return render json: { message: 'Order request cancelled successfully' }
     end
 
-    render json: { message: 'Order request cannot be cancelled', error: @order_request&.errors&.full_messages&.to_sentence }, status: :unprocessable_entity
+    render json: { message: 'Order request was not cancelled', error: @order_request&.errors&.full_messages&.to_sentence }, status: :unprocessable_entity
   end
 
   def update_status
@@ -61,7 +61,7 @@ class Api::V1::OrderRequestsController < ApplicationController
       render json: { message: 'Order request rejected', order_request: OrderRequestSerializer.new(@order_request).serializable_hash }
 
     else
-      render json: { message: 'Order request cannot be accepted / rejected', error: @order_request&.errors&.full_messages&.to_sentence }, status: :bad_request
+      render json: { message: 'Order request was not accepted / rejected', error: @order_request&.errors&.full_messages&.to_sentence }, status: :bad_request
 
     end
   end
