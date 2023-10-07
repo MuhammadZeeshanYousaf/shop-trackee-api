@@ -1,5 +1,5 @@
 class OrderRequestSerializer < ActiveModel::Serializer
-  attributes :id, :message, :status, :created_at, :orderable_type, :customer
+  attributes :id, :message, :status, :created_at, :orderable_type, :latitude, :longitude, :customer
 
   has_one :orderable
   has_one :shop
