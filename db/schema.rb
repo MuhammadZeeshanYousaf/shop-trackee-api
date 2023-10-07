@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_23_094506) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_26_102036) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,10 +55,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_23_094506) do
     t.string "vocation"
     t.integer "age"
     t.boolean "newsletter_subscribed", default: false
-    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_customers_on_user_id"
   end
 
   create_table "devise_api_tokens", force: :cascade do |t|
@@ -127,10 +125,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_23_094506) do
   create_table "sellers", force: :cascade do |t|
     t.text "intro", comment: "A short introduction for customers."
     t.integer "rating", default: 0
-    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_sellers_on_user_id"
   end
 
   create_table "services", force: :cascade do |t|
@@ -181,21 +177,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_23_094506) do
     t.string "phone"
     t.text "address"
     t.string "avatar"
-    t.string "role", default: "customer"
+    t.string "role_type"
+    t.bigint "role_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["role_type", "role_id"], name: "index_users_on_role"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "categories", column: "parent_id"
-  add_foreign_key "customers", "users"
   add_foreign_key "favorites", "customers"
   add_foreign_key "order_requests", "customers"
   add_foreign_key "products", "categories"
   add_foreign_key "products", "shops"
   add_foreign_key "search_histories", "customers"
-  add_foreign_key "sellers", "users"
   add_foreign_key "services", "categories"
   add_foreign_key "services", "shops"
   add_foreign_key "shops", "sellers"

@@ -1,47 +1,24 @@
-# frozen_string_literal: true
+# See the wiki for details:
+# https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_check_abilities.md
 
 class Ability
   include CanCan::Ability
 
   def initialize(user)
     return unless user.present?
-    can :update, User, user: user
+    can :update, User, id: user.id
 
-    if user.role_customer?
+    if user.customer?
       can :manage, Customer
       can :read, Shop
-      can :manage, OrderRequest, customer: user.customer
+      can :manage, OrderRequest, role: user.customer
 
-    elsif user.role_seller?
+    elsif user.seller?
       can :manage, Seller
-      can :manage, Shop, seller: user.seller
+      can :manage, Shop, role: user.seller
       can :read, OrderRequest
 
     end
 
-    # Define abilities for the user here. For example:
-    #
-    #   return unless user.present?
-    #   can :read, :all
-    #   return unless user.admin?
-    #   can :manage, :all
-    #
-    # The first argument to `can` is the action you are giving the user
-    # permission to do.
-    # If you pass :manage it will apply to every action. Other common actions
-    # here are :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on.
-    # If you pass :all it will apply to every resource. Otherwise pass a Ruby
-    # class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the
-    # objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, published: true
-    #
-    # See the wiki for details:
-    # https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_check_abilities.md
   end
 end

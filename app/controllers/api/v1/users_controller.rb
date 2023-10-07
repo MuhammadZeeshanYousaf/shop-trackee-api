@@ -4,18 +4,20 @@ class Api::V1::UsersController < ApplicationController
   def update
     if @user.update(user_params)
       role_based_obj = {}
-      if @user.role_customer?
-        @customer = Customer.find_or_initialize_by user: @user
-        @customer.assign_attributes customer_params
-        if @customer.save
+      if @user.customer?
+        @customer = @user.customer
+        @customer = @user.build_role if @customer.blank?
+
+        if @customer.update customer_params
           role_based_obj = { customer: @customer.serializable_hash }
         else
           role_based_obj = { error: @customer.errors.full_messages.to_sentence }
         end
-      elsif @user.role_seller?
-        @seller = Seller.find_or_initialize_by user: @user
-        @seller.assign_attributes seller_params
-        if @seller.save
+      elsif @user.seller?
+        @seller = @user.seller
+        @seller = @user.build_role if @seller.blank?
+
+        if @seller.update seller_params
           role_based_obj = { seller: @seller.serializable_hash }
         else
           role_based_obj = { error: @seller.errors.full_messages.to_sentence }
