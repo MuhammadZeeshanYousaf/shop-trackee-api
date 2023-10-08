@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 
       resources :favorites, only: [:index, :create] do
         delete :destroy, on: :collection
+        put :update, on: :collection
       end
 
       controller :customers do
