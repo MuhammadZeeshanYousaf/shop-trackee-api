@@ -181,11 +181,11 @@ class Api::V1::CustomersController < ApplicationController
       end
 
       @product_hashes = products.reduce([]) do |product_hashes, product|
-        product_hashes << ProductSerializer.new(product).serializable_hash
+        product_hashes << ProductSerializer.new(product, customer_id: @customer.id).serializable_hash
       end
 
       @service_hashes = services.reduce([]) do |service_hashes, service|
-        service_hashes << ServiceSerializer.new(service).serializable_hash
+        service_hashes << ServiceSerializer.new(service, customer_id: @customer.id).serializable_hash
       end
     end
 
