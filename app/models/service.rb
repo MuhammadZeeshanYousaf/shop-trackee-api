@@ -1,6 +1,5 @@
 class Service < ApplicationRecord
-  include ShopItemsModifiable
-  include NameSearchable
+  include ShopItemsModelConcern, NameSearchable
   paginates_per 6
   max_pages 100
 

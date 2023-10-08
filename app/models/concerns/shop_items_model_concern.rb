@@ -1,4 +1,4 @@
-module ShopItemsModifiable
+module ShopItemsModelConcern
   extend ActiveSupport::Concern
 
   included do
@@ -22,6 +22,10 @@ module ShopItemsModifiable
       end
     end
     nil
+  end
+
+  def favorite?(customer_id)
+    favorites.exists? customer_id: customer_id
   end
 
 end
