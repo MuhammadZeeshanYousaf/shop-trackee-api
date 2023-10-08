@@ -11,7 +11,7 @@ class Api::V1::FavoritesController < ApplicationController
     if @favoritable.present?
       @favorite = @customer.favorites.new(favoritable: @favoritable)
       if @favorite.save
-        render json: @favorite, serializer: FavoriteSerializer, status: :created
+        render json: { message: "#{@favorite.favoritable_type} added to favorites", favorite: FavoriteSerializer.new(@favorite).serializable_hash }, status: :created
       else
         render json: {
           message: 'Not added to Favorite',
@@ -28,9 +28,9 @@ class Api::V1::FavoritesController < ApplicationController
     if @favoritable.present?
       @favorite = @customer.favorites.find_by favoritable: @favoritable
       if @favorite&.destroy
-        render json: { message: 'Removed from Favorites successfully' }
+        render json: { message: "#{@favorite.favoritable_type} removed from favorites" }
       else
-        render json: { message: 'Favorite does not exist' }, status: :not_found
+        render json: { message: 'Favorite not found' }, status: :not_found
       end
     end
   end
