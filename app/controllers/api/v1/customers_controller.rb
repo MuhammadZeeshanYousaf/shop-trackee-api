@@ -177,6 +177,33 @@ class Api::V1::CustomersController < ApplicationController
     }
   end
 
+  def search_by_shop
+    @shop = Shop.find_by_id params[:shop_id]
+    return render json: { message: "Shop with id #{params[:shop_id]} not found"}, status: :not_found if @shop.blank?
+
+    product_page  = params[:product_page]
+    service_page  = params[:service_page]
+
+    @products = @shop.products.page(product_page)
+    @services = @shop.services.page(service_page)
+
+    generate_hashes([], @products, @services)
+
+    render json: {
+      product: {
+        current_page: @products.try(:current_page),
+        total_pages: @products.try(:total_pages),
+        data: @product_hashes,
+      },
+      service: {
+        current_page: @services.try(:current_page),
+        total_pages: @services.try(:total_pages),
+        data: @service_hashes
+      },
+      shop: ShopSerializer.new(@shop).serializable_hash
+    }
+  end
+
 
   private
 
