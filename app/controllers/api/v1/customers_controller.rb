@@ -1,4 +1,5 @@
 class Api::V1::CustomersController < ApplicationController
+  include ::HelperMethods
   before_action :set_customer
 
 
@@ -13,7 +14,21 @@ class Api::V1::CustomersController < ApplicationController
     @service_categories = Category.service_type.pluck :name
     @product_categories = Category.product_type.pluck :name
 
+    customer_name = current_devise_api_user.name
+    search_history_count = abbreviated_number @customer.search_histories.count
+    statuses = @customer.order_requests.pluck :status
+    accepted = abbreviated_number statuses.count('accepted')
+    rejected = abbreviated_number statuses.count('rejected')
+    pending  = abbreviated_number statuses.count('pending')
+
     render json: {
+      stats: {
+        name: customer_name,
+        searches: search_history_count,
+        delivered: accepted,
+        pending: pending,
+        rejected: rejected
+      },
       product: {
         categories: @product_categories,
         data: @product_hashes
