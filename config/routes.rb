@@ -36,6 +36,7 @@ Rails.application.routes.draw do
 
       controller :customers do
         get 'search_all', 'search_by_category'
+        get 'search_by_shop/:shop_id', action: :search_by_shop, as: :search_by_shop
         match 'search', via: [:get, :post]
       end
 
