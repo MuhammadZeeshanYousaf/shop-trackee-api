@@ -5,7 +5,7 @@ class SearchHistory < ApplicationRecord
   belongs_to :customer
   has_one_attached :image
 
-  validates :name, uniqueness: true
+  validates_presence_of :name
 
   def record_it(query)
     if query.is_a?(Array) && query.length > 0
