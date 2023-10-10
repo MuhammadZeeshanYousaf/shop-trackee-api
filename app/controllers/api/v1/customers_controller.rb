@@ -187,7 +187,7 @@ class Api::V1::CustomersController < ApplicationController
     @products = @shop.products.page(product_page)
     @services = @shop.services.page(service_page)
 
-    generate_hashes([], @products, @services)
+    generate_hashes([@shop], @products, @services)
 
     render json: {
       product: {
@@ -200,7 +200,9 @@ class Api::V1::CustomersController < ApplicationController
         total_pages: @services.try(:total_pages),
         data: @service_hashes
       },
-      shop: ShopSerializer.new(@shop).serializable_hash
+      shop: {
+        data: @shop_hashes
+      }
     }
   end
 
