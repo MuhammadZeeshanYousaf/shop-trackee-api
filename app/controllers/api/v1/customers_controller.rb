@@ -5,11 +5,11 @@ class Api::V1::CustomersController < ApplicationController
   def home
     shop_ids = ShopsNearMeService.call(*search_params.values)
 
-    # shops = Shop.where(id: shop_ids)
+    shops = Shop.where(id: shop_ids).page
     products = Product.where(shop_id: shop_ids).page
     services = Service.where(shop_id: shop_ids).page
 
-    generate_hashes([], products, services)
+    generate_hashes(shops, products, services)
     @service_categories = Category.service_type.pluck :name
     @product_categories = Category.product_type.pluck :name
 
@@ -22,7 +22,7 @@ class Api::V1::CustomersController < ApplicationController
         categories: @service_categories,
         data: @service_hashes
       },
-      # shops: @shop_hashes
+      shop: { data: @shop_hashes }
     }
 
   end

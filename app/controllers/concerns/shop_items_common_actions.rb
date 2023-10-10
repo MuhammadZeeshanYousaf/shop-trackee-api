@@ -34,7 +34,7 @@ module ShopItemsCommonActions
     if @object.save(validate: false)
       render json: {
         message: @object.class.to_s + ' image uploaded successfully',
-        "#{@object.class.to_s.underscore.pluralize}" => @object.class.to_s.concat('Serializer').constantize.new(@object).serializable_hash.slice(:id, :images)
+        "#{@object.class.to_s.underscore.pluralize}" => ActiveModelSerializers::SerializableResource.new(@object).serializable_hash.slice(:id, :images)
       }, status: :created
     else
       render json: {
