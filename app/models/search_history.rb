@@ -1,7 +1,7 @@
 class SearchHistory < ApplicationRecord
   include NameSearchable
 
-  default_scope { order(created_at: :desc) }
+  default_scope { where("name <> NULL OR name <> ''").order(created_at: :desc) }
   belongs_to :customer
   has_one_attached :image
 
