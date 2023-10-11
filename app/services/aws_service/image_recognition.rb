@@ -13,7 +13,7 @@ module AwsService
           s3_object: {
             bucket: ENV['AWS_DEFAULT_BUCKET'],
             name: @image
-          },
+          }
         },
         max_labels: 5
       }
