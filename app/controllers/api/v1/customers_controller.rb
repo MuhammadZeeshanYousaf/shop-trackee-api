@@ -113,10 +113,13 @@ class Api::V1::CustomersController < ApplicationController
       generate_hashes(shops, products, services)
 
       render json: {
-        shops: @shop_hashes,
         products: @product_hashes,
-        services: @service_hashes
+        services: @service_hashes,
+        shops: @shop_hashes
       }
+
+      # Finally, remove searched image uploaded to aws to recognize
+      @history.image.purge_later rescue false if @history.present?
     else
       render json: { message: 'Invalid format for search query', error: 'Bad Request' }, status: :bad_request
     end
