@@ -4,7 +4,7 @@ class Api::V1::CustomersController < ApplicationController
 
 
   def home
-    shop_ids = ShopsNearMeService.call(*search_params.values)
+    shop_ids = ShopsNearMeService.call(search_params)
 
     shops = Shop.where(id: shop_ids).page
     products = Product.where(shop_id: shop_ids).page
@@ -47,7 +47,7 @@ class Api::V1::CustomersController < ApplicationController
     product_page = params[:product_page]
     service_page = params[:service_page]
     shop_page    = params[:shop_page]
-    shop_ids = ShopsNearMeService.call(*search_params.values)
+    shop_ids = ShopsNearMeService.call(search_params)
 
     if type.present? && type.camelize.eql?(Product.to_s)
       @products = Product.where(shop_id: shop_ids).page(product_page)
@@ -103,7 +103,7 @@ class Api::V1::CustomersController < ApplicationController
     else @query = params[:q] end
 
     if @query.is_a?(String) || @query.is_a?(Array)
-      shop_ids = ShopsNearMeService.call(*search_params.values)
+      shop_ids = ShopsNearMeService.call(search_params)
       @history.present? ? @history.record_it(@query) : @customer.record_history(@query)
 
       shops = Shop.where(id: shop_ids)
@@ -136,7 +136,7 @@ class Api::V1::CustomersController < ApplicationController
     @category_ids = Category.search_like(category_name).ids if @category_ids.blank?
 
     if @category_ids.present?
-      shop_ids = ShopsNearMeService.call(*search_params.values)
+      shop_ids = ShopsNearMeService.call(search_params)
 
       if type.present? && type.camelize.eql?(Product.to_s)
         @products = Product.where(shop_id: shop_ids, category_id: @category_ids).page(product_page)
