@@ -1,7 +1,7 @@
 class ShopsNearMeService < ApplicationService
 
-  def initialize(distance, latitude, longitude)
-    @distance, @latitude, @longitude = distance.to_i, latitude.to_f, longitude.to_f
+  def initialize(data)
+    @distance, @latitude, @longitude = data[:distance].to_i, data[:latitude].to_f, data[:longitude].to_f
   end
 
   def call
