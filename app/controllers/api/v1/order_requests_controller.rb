@@ -8,7 +8,9 @@ class Api::V1::OrderRequestsController < ApplicationController
   def index
     @object = @customer.present? ? @customer : @seller
     @ability.authorize! :read, @object
-    render json: @object.order_requests, each_serializer: OrderRequestSerializer
+    order_requests = @object.order_requests.page(params[:page])
+    render json: order_requests, each_serializer: OrderRequestSerializer, adapter: :json,
+           meta: { current_page: order_requests.try(:current_page), total_pages: order_requests.try(:total_pages) }
   end
 
   # POST customer/order_requests
