@@ -10,7 +10,8 @@ class Api::V1::OrderRequestsController < ApplicationController
     @ability.authorize! :read, @object
     order_requests = @object.order_requests.page(params[:page])
     render json: order_requests, each_serializer: OrderRequestSerializer, adapter: :json,
-           meta: { current_page: order_requests.try(:current_page), total_pages: order_requests.try(:total_pages) }
+           meta: { current_page: order_requests.try(:current_page), total_pages: order_requests.try(:total_pages),
+                   page_size: order_requests.try(:limit_value) }
   end
 
   # POST customer/order_requests
