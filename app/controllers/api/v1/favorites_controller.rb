@@ -3,7 +3,9 @@ class Api::V1::FavoritesController < ApplicationController
   before_action :set_favoritable, only: [ :create, :destroy, :update ]
 
   def index
-    render json: @customer.favorites, each_serializer: FavoriteSerializer
+    favorites = @customer.favorites.page(params[:page])
+    render json: favorites, each_serializer: FavoriteSerializer, adapter: :json,
+           meta: { current_page: favorites.try(:current_page), total_pages: favorites.try(:total_pages) }
   end
 
   # PUT /favorites

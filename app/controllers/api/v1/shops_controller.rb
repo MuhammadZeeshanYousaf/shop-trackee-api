@@ -5,7 +5,9 @@ class Api::V1::ShopsController < ApplicationController
   # GET /shops
   def index
     if @seller.present?
-      render json: @seller.shops, each_serializer: ShopSerializer
+      shops = @seller.shops.page(params[:page])
+      render json: shops, each_serializer: ShopSerializer, adapter: :json,
+             meta: { current_page: shops.try(:current_page), total_pages: shops.try(:total_pages) }
     else
       render json: {
         message: "#{current_devise_api_user&.name} is Unauthorized",
