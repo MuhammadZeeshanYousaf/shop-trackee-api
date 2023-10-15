@@ -14,4 +14,12 @@ class SearchHistory < ApplicationRecord
     end
   end
 
+  # @return [Array|String]
+  def latest_search
+    if queries? && name?
+      queries << name
+    elsif queries? then queries
+    elsif name? then name end
+  end
+
 end

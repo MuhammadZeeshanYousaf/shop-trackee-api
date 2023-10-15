@@ -94,10 +94,7 @@ class Api::V1::CustomersController < ApplicationController
 
     if params[:q].blank?
       @history = @customer.search_histories.first
-      params[:q] = if @history&.queries? && @history&.name?
-                     @history.queries << @history.name
-                   elsif @history&.queries? then @history.queries
-                   elsif @history&.name? then @history.name end
+      params[:q] = @history.try(:latest_search)
     end
 
     if request.post? && params[:q].is_a?(ActionDispatch::Http::UploadedFile)
