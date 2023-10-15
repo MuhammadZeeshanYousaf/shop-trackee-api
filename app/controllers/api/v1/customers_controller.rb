@@ -88,6 +88,10 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def search
+    product_page  = params[:product_page]
+    service_page  = params[:service_page]
+    shop_page     = params[:shop_page]
+
     if params[:q].blank?
       @history = @customer.search_histories.first
       params[:q] = if @history&.queries? then @history&.queries elsif @history.name? then @history.name end
@@ -111,16 +115,28 @@ class Api::V1::CustomersController < ApplicationController
       shop_ids = ShopsNearMeService.call(search_params)
       @history.present? ? @history.record_it(@query) : @customer.record_history(@query)
 
-      shops = Shop.where(id: shop_ids)
-      products = Product.where(shop_id: shops.ids).search_like(@query)
-      services = Service.where(shop_id: shops.ids).search_like(@query)
+      @shops = Shop.where(id: shop_ids).page(shop_page)
+      @products = Product.where(shop_id: shop_ids).search_like(@query).page(product_page)
+      @services = Service.where(shop_id: shop_ids).search_like(@query).page(service_page)
 
-      generate_hashes(shops, products, services)
+      generate_hashes(@shops, @products, @services)
 
       render json: {
-        products: @product_hashes,
-        services: @service_hashes,
-        shops: @shop_hashes
+        product: {
+          current_page: @products.try(:current_page),
+          total_pages: @products.try(:total_pages),
+          data: @product_hashes,
+        },
+        service: {
+          current_page: @services.try(:current_page),
+          total_pages: @services.try(:total_pages),
+          data: @service_hashes
+        },
+        shop: {
+          current_page: @shops.try(:current_page),
+          total_pages: @shops.try(:total_pages),
+          data: @shop_hashes
+        }
       }
 
       # Finally, remove searched image uploaded to aws to recognize
