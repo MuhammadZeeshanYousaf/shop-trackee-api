@@ -7,8 +7,8 @@ class SearchHistory < ApplicationRecord
 
   def record_it(query)
     if query.is_a?(Array) && query.length > 0
-      update_attribute(:name, query.first)
-    elsif query.is_a?(String) && query.length > 2
+      update_attribute(:queries, query)
+    elsif query.is_a?(String) && query.length > 1
       update_attribute(:name, query)
     end
   end

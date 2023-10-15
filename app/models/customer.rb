@@ -8,9 +8,8 @@ class Customer < ApplicationRecord
 
   def record_history(query)
     if query.is_a?(Array) && query.length > 0
-      query = query.join(' ')
-      search_histories.create(name: query)
-    elsif query.is_a?(String) && query.length > 2
+      search_histories.create(queries: query)
+    elsif query.is_a?(String) && query.length > 1
       search_histories.create(name: query)
     end
   end
