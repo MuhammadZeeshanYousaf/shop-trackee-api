@@ -5,7 +5,9 @@ class Api::V1::ProductsController < ApplicationController
 
   # GET /products
   def index
-    render json: @shop.products, each_serializer: ProductSerializer
+    products = @shop.products.page(params[:page])
+    render json: products, each_serializer: ProductSerializer, adapter: :json,
+           meta: { current_page: products.try(:current_page), total_pages: products.try(:total_pages) }
   end
 
   # GET /products/1

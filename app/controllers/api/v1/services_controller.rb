@@ -5,7 +5,9 @@ class Api::V1::ServicesController < ApplicationController
 
   # GET /services
   def index
-    render json: @shop.services, each_serializer: ServiceSerializer
+    services = @shop.services.page(params[:page])
+    render json: services, each_serializer: ServiceSerializer, adapter: :json,
+           meta: { current_page: services.try(:current_page), total_pages: services.try(:total_pages) }
   end
 
   # GET /services/1
