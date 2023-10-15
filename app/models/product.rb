@@ -13,4 +13,7 @@ class Product < ApplicationRecord
 
   validates_presence_of :name, :price, :stock_quantity
   delegate :name, to: :category, prefix: true, allow_nil: true
+
+  scope :stocked, -> { where('stock_quantity > ?', 0) }
+
 end

@@ -7,7 +7,7 @@ class Api::V1::CustomersController < ApplicationController
     shop_ids = ShopsNearMeService.call(search_params)
 
     shops = Shop.where(id: shop_ids).page
-    products = Product.where(shop_id: shop_ids).page
+    products = Product.stocked.where(shop_id: shop_ids).page
     services = Service.where(shop_id: shop_ids).page
 
     generate_hashes(shops, products, services)
@@ -50,7 +50,7 @@ class Api::V1::CustomersController < ApplicationController
     shop_ids = ShopsNearMeService.call(search_params)
 
     if type.present? && type.camelize.eql?(Product.to_s)
-      @products = Product.where(shop_id: shop_ids).page(product_page)
+      @products = Product.stocked.where(shop_id: shop_ids).page(product_page)
       @shops = Shop.where(id: @products.pluck(:shop_id))
       @services = []
 
@@ -61,7 +61,7 @@ class Api::V1::CustomersController < ApplicationController
 
     else
       @shops = Shop.where(id: shop_ids).page(shop_page)
-      @products = Product.where(shop_id: @shops.ids).page(product_page)
+      @products = Product.stocked.where(shop_id: @shops.ids).page(product_page)
       @services = Service.where(shop_id: @shops.ids).page(service_page)
 
     end
@@ -116,7 +116,7 @@ class Api::V1::CustomersController < ApplicationController
       @history.present? ? @history.record_it(@query) : @customer.record_history(@query)
 
       @shops = Shop.where(id: shop_ids).page(shop_page)
-      @products = Product.where(shop_id: shop_ids).search_like(@query).page(product_page)
+      @products = Product.stocked.where(shop_id: shop_ids).search_like(@query).page(product_page)
       @services = Service.where(shop_id: shop_ids).search_like(@query).page(service_page)
 
       generate_hashes(@shops, @products, @services)
@@ -160,7 +160,7 @@ class Api::V1::CustomersController < ApplicationController
       shop_ids = ShopsNearMeService.call(search_params)
 
       if type.present? && type.camelize.eql?(Product.to_s)
-        @products = Product.where(shop_id: shop_ids, category_id: @category_ids).page(product_page)
+        @products = Product.stocked.where(shop_id: shop_ids, category_id: @category_ids).page(product_page)
         @shops = Shop.where(id: @products.pluck(:shop_id))
         @services = []
 
@@ -170,7 +170,7 @@ class Api::V1::CustomersController < ApplicationController
         @products = []
 
       else
-        @products = Product.where(shop_id: shop_ids, category_id: @category_ids).page(product_page)
+        @products = Product.stocked.where(shop_id: shop_ids, category_id: @category_ids).page(product_page)
         @services = Service.where(shop_id: shop_ids, category_id: @category_ids).page(service_page)
         shop_ids = (@products.pluck(:shop_id) + @services.pluck(:shop_id)).uniq
         @shops = Shop.where(id: shop_ids).page(shop_page)
