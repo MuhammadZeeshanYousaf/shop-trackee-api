@@ -3,8 +3,8 @@ class Shop < ApplicationRecord
   array_enum closing_days: { 'Monday' => 0, 'Tuesday' => 1, 'Wednesday' => 2,
                              'Thursday' => 3, 'Friday' => 4, 'Saturday' => 5, 'Sunday' => 6 }
 
-  default_scope { order(:created_at) }
-  paginates_per 5
+  default_scope { order(created_at: :desc) }
+  paginates_per 6
   validates :closing_days, subset: closing_days.keys
   validates :name, uniqueness: { scope: :seller }
   # validates :latitude, :longitude, presence: true
