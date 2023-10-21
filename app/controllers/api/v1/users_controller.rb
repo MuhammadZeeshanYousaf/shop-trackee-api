@@ -51,7 +51,7 @@ class Api::V1::UsersController < ApplicationController
   # GET | POST /user/reset_password/:token
   def reset_password
     @user = User.find_by_password_reset_token params[:token] if params[:token].present?
-    return render json: { ok: false }, status: :not_acceptable if @user.blank?
+    return render json: { ok: false } if @user.blank?
 
     if request.get?
       render json: { ok: true, email: @user.email }
@@ -70,7 +70,7 @@ class Api::V1::UsersController < ApplicationController
   # GET /user/secure_account/:token
   def secure_account
     @user = User.find_by_password_reset_token params[:token] if params[:token].present?
-    return render json: { ok: false }, status: :not_acceptable if @user.blank?
+    return render json: { ok: false } if @user.blank?
 
     @user.regenerate_password_reset_token
     render json: { ok: true, message: 'Thank you for the confirmation' }
