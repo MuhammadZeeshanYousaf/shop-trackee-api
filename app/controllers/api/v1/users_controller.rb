@@ -54,7 +54,7 @@ class Api::V1::UsersController < ApplicationController
     return render json: { ok: false }, status: :not_acceptable if @user.blank?
 
     if request.get?
-      render json: { ok: true }
+      render json: { ok: true, email: @user.email }
 
     elsif request.post?
       if @user.update(password: params[:new_password])
