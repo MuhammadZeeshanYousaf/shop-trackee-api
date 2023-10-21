@@ -26,15 +26,15 @@ class ChangeUserRelation < ActiveRecord::Migration[7.0]
       end
     end
 
-    remove_reference :customers, :user
-    remove_reference :sellers, :user
+    remove_reference :customers, :user, foreign_key: true
+    remove_reference :sellers, :user, foreign_key: true
   end
 
 
   def down
     add_column :users, :role, :string
-    add_reference :sellers, :user
-    add_reference :customers, :user
+    add_reference :sellers, :user, foreign_key: true
+    add_reference :customers, :user, foreign_key: true
 
     User.find_each do |user|
       if user.role_type.present?
