@@ -57,10 +57,13 @@ class Api::V1::UsersController < ApplicationController
       render json: { ok: true }
 
     elsif request.post?
-      @user.update(password: [:new_password])
-      @user.regenerate_password_reset_token
+      if @user.update(password: params[:new_password])
+        @user.regenerate_password_reset_token
 
-      render json: { ok: true, message: 'Password has been updated successfully' }
+        render json: { ok: true, message: 'Password has been updated successfully' }
+      else
+        render json: { ok: false, message: @user.errors.full_messages.to_sentence }, status: :unprocessable_entity
+      end
     end
   end
 
