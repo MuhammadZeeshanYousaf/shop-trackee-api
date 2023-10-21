@@ -13,6 +13,7 @@ class User < ApplicationRecord
     customer: 'customer'
   }, prefix: true
 
+  has_secure_token :password_reset_token
   has_one :customer
   has_one :seller
   has_many :favorites, through: :customer
@@ -32,6 +33,10 @@ class User < ApplicationRecord
     elsif role_customer?
       customer.blank?
     end
+  end
+
+  def send_password_reset_link
+    UserMailer.with(user: self).password_reset_email.deliver_later
   end
 
   private

@@ -1,8 +1,8 @@
-<h1>Welcome to <%= APP_NAME %>, <%= @user.name %></h1>
+<h2>Welcome to <%= APP_NAME %>, <%= @user.name %></h2>
 <p>
-  You have successfully signed up to: <%= @user.email %><br>
+  You have successfully signed up to: <%= @user.email %>
 </p>
 <p>
-  To login to the site, just follow this <a href="#" class="login-link">link</a>.
+  To login to the site, just follow this <a href="<%= APP_HOST_URL %>/login/" target="_blank" class="login-link">Link</a>.
 </p>
 <p>Thanks for joining and have a great day!</p>

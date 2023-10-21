@@ -1,4 +1,5 @@
 class Api::V1::UsersController < ApplicationController
+  skip_before_action :authenticate_devise_api_token!, :set_ability, only: [ :send_password_reset_link, :secure_account, :reset_password ]
   before_action :set_user
 
   def update
@@ -33,6 +34,43 @@ class Api::V1::UsersController < ApplicationController
         error: @user.errors.full_messages.to_sentence
       }, status: :unprocessable_entity
     end
+  end
+
+  # POST /user/send_password_reset_link
+  def send_password_reset_link
+    @user = User.find_by_email params[:email]
+
+    if @user.present?
+      @user.send_password_reset_link
+      render json: { message: 'Password reset link has been sent to your email' }
+    else
+      render json: { message: 'User with this email does not exist!' }, status: :not_found
+    end
+  end
+
+  # GET | POST /user/reset_password/:token
+  def reset_password
+    @user = User.find_by_password_reset_token params[:token] if params[:token].present?
+    return render json: { ok: false }, status: :not_acceptable if @user.blank?
+
+    if request.get?
+      render json: { ok: true }
+
+    elsif request.post?
+      @user.update(password: [:new_password])
+      @user.regenerate_password_reset_token
+
+      render json: { ok: true, message: 'Password has been updated successfully' }
+    end
+  end
+
+  # GET /user/secure_account/:token
+  def secure_account
+    @user = User.find_by_password_reset_token params[:token] if params[:token].present?
+    return render json: { ok: false }, status: :not_acceptable if @user.blank?
+
+    @user.regenerate_password_reset_token
+    render json: { ok: true, message: 'Thank you for the confirmation' }
   end
 
 
