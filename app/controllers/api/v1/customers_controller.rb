@@ -47,22 +47,23 @@ class Api::V1::CustomersController < ApplicationController
     product_page = params[:product_page]
     service_page = params[:service_page]
     shop_page    = params[:shop_page]
+    price_order  = params[:price_order].eql?('desc') ? 'desc' : 'asc'
     shop_ids = ShopsNearMeService.call(search_params)
 
     if type.present? && type.camelize.eql?(Product.to_s)
-      @products = Product.stocked.where(shop_id: shop_ids).page(product_page)
+      @products = Product.stocked.order(:price => price_order).where(shop_id: shop_ids).page(product_page)
       @shops = Shop.where(id: @products.pluck(:shop_id))
       @services = []
 
     elsif type.present? && type.camelize.eql?(Service.to_s)
-      @services = Service.where(shop_id: shop_ids).page(service_page)
+      @services = Service.order(:rate => price_order).where(shop_id: shop_ids).page(service_page)
       @shops = Shop.where(id: @services.pluck(:shop_id))
       @products = []
 
     else
       @shops = Shop.where(id: shop_ids).page(shop_page)
-      @products = Product.stocked.where(shop_id: @shops.ids).page(product_page)
-      @services = Service.where(shop_id: @shops.ids).page(service_page)
+      @products = Product.stocked.order(:price => price_order).where(shop_id: @shops.ids).page(product_page)
+      @services = Service.order(:rate => price_order).where(shop_id: @shops.ids).page(service_page)
 
     end
 
@@ -91,6 +92,7 @@ class Api::V1::CustomersController < ApplicationController
     product_page  = params[:product_page]
     service_page  = params[:service_page]
     shop_page     = params[:shop_page]
+    price_order   = params[:price_order].eql?('desc') ? 'desc' : 'asc'
 
     if params[:q].blank?
       @history = @customer.search_histories.first
@@ -116,8 +118,8 @@ class Api::V1::CustomersController < ApplicationController
       @history.present? ? @history.record_it(@query) : @customer.record_history(@query)
 
       @shops = Shop.where(id: shop_ids).page(shop_page)
-      @products = Product.stocked.where(shop_id: shop_ids).search_like(@query).page(product_page)
-      @services = Service.where(shop_id: shop_ids).search_like(@query).page(service_page)
+      @products = Product.stocked.order(:price => price_order).where(shop_id: shop_ids).search_like(@query).page(product_page)
+      @services = Service.order(:rate => price_order).where(shop_id: shop_ids).search_like(@query).page(service_page)
 
       generate_hashes(@shops, @products, @services)
 
@@ -152,6 +154,7 @@ class Api::V1::CustomersController < ApplicationController
     product_page  = params[:product_page]
     service_page  = params[:service_page]
     shop_page     = params[:shop_page]
+    price_order  = params[:price_order].eql?('desc') ? 'desc' : 'asc'
 
     @category_ids = Category.where(name: category_name).ids
     @category_ids = Category.search_like(category_name).ids if @category_ids.blank?
@@ -160,18 +163,18 @@ class Api::V1::CustomersController < ApplicationController
       shop_ids = ShopsNearMeService.call(search_params)
 
       if type.present? && type.camelize.eql?(Product.to_s)
-        @products = Product.stocked.where(shop_id: shop_ids, category_id: @category_ids).page(product_page)
+        @products = Product.stocked.order(:price => price_order).where(shop_id: shop_ids, category_id: @category_ids).page(product_page)
         @shops = Shop.where(id: @products.pluck(:shop_id))
         @services = []
 
       elsif type.present? && type.camelize.eql?(Service.to_s)
-        @services = Service.where(shop_id: shop_ids, category_id: @category_ids).page(service_page)
+        @services = Service.order(:rate => price_order).where(shop_id: shop_ids, category_id: @category_ids).page(service_page)
         @shops = Shop.where(id: @services.pluck(:shop_id))
         @products = []
 
       else
-        @products = Product.stocked.where(shop_id: shop_ids, category_id: @category_ids).page(product_page)
-        @services = Service.where(shop_id: shop_ids, category_id: @category_ids).page(service_page)
+        @products = Product.stocked.order(:price => price_order).where(shop_id: shop_ids, category_id: @category_ids).page(product_page)
+        @services = Service.order(:rate => price_order).where(shop_id: shop_ids, category_id: @category_ids).page(service_page)
         shop_ids = (@products.pluck(:shop_id) + @services.pluck(:shop_id)).uniq
         @shops = Shop.where(id: shop_ids).page(shop_page)
 
@@ -207,9 +210,10 @@ class Api::V1::CustomersController < ApplicationController
 
     product_page  = params[:product_page]
     service_page  = params[:service_page]
+    price_order   = params[:price_order].eql?('desc') ? 'desc' : 'asc'
 
-    @products = @shop.products.page(product_page)
-    @services = @shop.services.page(service_page)
+    @products = @shop.products.stocked.order(:price => price_order).page(product_page)
+    @services = @shop.services.order(:rate => price_order).page(service_page)
 
     generate_hashes([@shop], @products, @services)
 
