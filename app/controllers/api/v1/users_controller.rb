@@ -67,6 +67,20 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  # POST /user/update_password
+  def update_password
+    if @user.valid_password? params[:prev_password]
+      if @user.update password: params[:new_password]
+        render json: { ok: true, message: 'Password updated successfully' }
+      else
+        render json: { ok: false, message: @user.errors.full_messages.to_sentence }
+      end
+
+    else
+      render json: { ok: false, message: 'Previous password is incorrect' }
+    end
+  end
+
   # GET /user/secure_account/:token
   def secure_account
     @user = User.find_by_password_reset_token params[:token] if params[:token].present?

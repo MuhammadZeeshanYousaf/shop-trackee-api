@@ -24,7 +24,7 @@ Rails.application.routes.draw do
 
       resource :user, only: :update do
         member do
-          post 'send_password_reset_link'
+          post 'send_password_reset_link', 'update_password'
           match 'reset_password/:token', via: [:get, :post], action: :reset_password, as: :reset_password
           get 'secure_account/:token', action: :secure_account, as: :secure_account
         end
