@@ -1,8 +1,64 @@
-<h2>Welcome to <%= APP_NAME %>, <%= @user.name %></h2>
-<p>
-  You have successfully signed up to: <%= @user.email %>
-</p>
-<p>
-  To login to the site, just follow this <a href="<%= APP_HOST_URL %>/login/" target="_blank" class="login-link">Link</a>.
-</p>
-<p>Thanks for joining and have a great day!</p>
+
+<table width="100%" cellpadding="0" cellspacing="0" bgcolor="#f0f0f0">
+  <tr>
+    <td align="center">
+      <table width="600" cellpadding="0" cellspacing="0">
+        <!-- Header -->
+        <tr>
+          <td
+            bgcolor="#ffffff"
+            style="
+            padding: 10px 0;
+              text-align: center;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <img
+              src="<%= APP_HOST_URL %>/images/outside-app-icon.svg"
+              width="60px"
+              />
+            <h1>&nbsp;&nbsp;<%= APP_NAME %></h1>
+          </td>
+        </tr>
+
+        <!-- Email Content -->
+        <tr>
+          <td
+            bgcolor="#ffffff"
+            style="
+            padding-top: 0px;
+              padding-bottom: 30px;
+              padding-left: 20px;
+              padding-right: 20px;
+            "
+          >
+            <hr />
+            <div style="margin-top: 50px">
+              <h2>Welcome to <%= APP_NAME %>, <%= @user.name %></h2>
+              <p style="margin-top: 1px;">You have successfully signed up with: <%= @user.email %></p>
+              <p>
+                To login to the site, just follow this
+                <a href="<%= APP_HOST_URL %>/login/" target="_blank">link</a
+                >.
+              </p>
+              <p>Thanks for joining and have a great day!</p>
+            </div>
+          </td>
+        </tr>
+        <!-- Footer -->
+        <tr>
+          <td
+            bgcolor="#7367F0"
+            style="padding: 0px 20px; text-align: center"
+          >
+            <p style="color: #ffffff">
+              &copy; <%= "#{Time.now.year} #{APP_NAME}" %>. All rights reserved.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
