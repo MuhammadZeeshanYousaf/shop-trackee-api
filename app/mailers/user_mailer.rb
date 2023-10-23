@@ -2,7 +2,6 @@ class UserMailer < ApplicationMailer
 
   def welcome_email
     @user = params[:user]
-    @logo_url = "#{APP_HOST_URL}/images/outside-app-icon.svg"
 
     mail(to: email_address_with_name(@user.email, @user.name), subject: "Welcome to #{APP_NAME}!")
   end
@@ -13,7 +12,6 @@ class UserMailer < ApplicationMailer
 
     @secure_account_url = secure_account_api_v1_user_url(reset_token)
     @reset_password_url = "#{APP_HOST_URL}/reset-password/?token=#{reset_token}"
-    @logo_url = "#{APP_HOST_URL}/images/outside-app-icon.svg"
 
     mail(to: email_address_with_name(@user.email, @user.name), subject: "Request to reset password for #{@user.name}")
   end
