@@ -1,7 +1,6 @@
 module ShopItemsCommonActions
   extend ActiveSupport::Concern
 
-  # Object => Product | Service
   included do
     before_action :set_item_object, only: %i[ create_or_upload replace_image remove_image recognize ]
 
@@ -54,7 +53,7 @@ module ShopItemsCommonActions
           message: 'Image replaced successfully',
           image: {
             id: @object.images.last.id,
-            path: @object.images.last.url
+            path: rails_blob_path(@object.images.last)
           }
         })
       else

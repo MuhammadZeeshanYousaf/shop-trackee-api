@@ -12,10 +12,10 @@ module Devise::Api::Responses::TokenResponseDecorator
     elsif resource_owner.role_customer?
       resource_owner.customer.serializable_hash(only: [:vocation, :age, :newsletter_subscribed])
     else {} end
-    @avatar_url = resource_owner.avatar.variant(:thumb).url || resource_owner.avatar.url if resource_owner.avatar.attached?
+    @avatar_path = rails_blob_path(resource_owner.avatar.variant(:thumb), only_path: true) if resource_owner.avatar.attached?
 
     default_body.merge(resource_owner: { **resource_owner.attributes.with_indifferent_access.slice(*Devise::Api::Responses::UserParamSanitizer.present),
-                                         avatar: @avatar_url, **additional_params })
+                                         avatar: @avatar_path, **additional_params })
   end
 
 end
