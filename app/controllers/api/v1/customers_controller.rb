@@ -209,7 +209,9 @@ class Api::V1::CustomersController < ApplicationController
 
   def search_by_shop
     @shop = Shop.find_by_id params[:shop_id]
-    return render json: { message: "Shop with id #{params[:shop_id]} not found"}, status: :not_found if @shop.blank?
+    if @shop.blank? 
+      return render(json: { message: "Shop with id #{params[:shop_id]} not found"}, status: :not_found)
+    end
 
     product_page = params[:product_page]
     service_page = params[:service_page]
