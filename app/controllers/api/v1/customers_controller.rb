@@ -235,7 +235,7 @@ class Api::V1::CustomersController < ApplicationController
         data: @service_hashes
       },
       shop: {
-        data: @shop_hashes
+        data: @shop_hashes.first
       }
     }
   end
