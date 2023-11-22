@@ -218,8 +218,8 @@ class Api::V1::CustomersController < ApplicationController
     order_attr   = %w[desc asc].include?(params[:price_order].to_s) ? 'price' : 'created_at'
     order_by     = params[:price_order].eql?('desc') ? 'desc' : 'asc'
 
-    @products = @shop.products.unscoped.stocked.order(order_attr => order_by).page(product_page)
-    @services = @shop.services.unscoped.order(order_attr => order_by).page(service_page)
+    @products = Product.stocked.order(order_attr => order_by).where(shop_id: @shop.id).page(product_page)
+    @services = Service.order(order_attr => order_by).where(shop_id: @shop.id).page(service_page)
 
     generate_hashes([@shop], @products, @services)
 
