@@ -27,6 +27,7 @@ module AwsService
         hash_labels = []
         labels.each do |label|
           puts "Label:      #{label.name}"
+          puts "Category: #{label.categories.map(&:name)}"
           puts "Confidence: #{label.confidence}"
           puts "Instances:"
           label['instances'].each do |instance|

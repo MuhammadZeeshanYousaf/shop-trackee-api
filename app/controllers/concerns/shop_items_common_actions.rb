@@ -90,9 +90,13 @@ module ShopItemsCommonActions
         @objects = []
         # Generate objects
         image_data.each do |label_data|
-          category = Category.search_like(label_data[:categories]).where(category_type: @object.class.to_s).last
-          category = Category.create(name: label_data[:categories].first, category_type: @object.class.to_s) if category.blank?
-          category = Category.where(category_type: @object.class.to_s).last if label_data[:categories].blank?
+          if label_data[:categories].blank?
+            category = Category.search_like(label_data[:categories]).where(category_type: @object.class.to_s).last
+          else
+            category = Category.find_by(name: label_data[:categories], category_type: @object.class.to_s)
+            category = Category.create(name: label_data[:categories].first, category_type: @object.class.to_s) if category.blank?
+          end
+
           object = @object.class.new label_data.slice(:name, :description).merge(shop_id: @object.shop_id, category_id: category.id)
 
           @objects << object
