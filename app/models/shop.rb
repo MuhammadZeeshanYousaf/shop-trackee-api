@@ -10,8 +10,8 @@ class Shop < ApplicationRecord
   # validates :latitude, :longitude, presence: true
 
   belongs_to :seller
-  has_many :products
-  has_many :services
+  has_many :products, dependent: :destroy
+  has_many :services, dependent: :destroy
   has_many :order_requests, dependent: :destroy
 
 
