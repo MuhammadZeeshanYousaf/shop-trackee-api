@@ -6,7 +6,7 @@ In the contemporary business landscape, small enterprises encounter a significan
 
 ## Introduction
 
-The "Shop Trackee: Web App" project aims to address a significant issue prevalent in the digital era, where small businesses such as service providers, mini stores, and repair shops struggle to establish an online presence due to cost constraints. In response to this, we propose the development of a Web Application Software that acts as a centralized platform for local businesses to connect with their local customer base.
+The [Shop Trackee: Web App](https://shoptrackee.me) aims to address a significant issue prevalent in the digital era, where small businesses such as service providers, mini stores, and repair shops struggle to establish an online presence due to cost constraints. In response to this, we propose the development of a Web Application Software that acts as a centralized platform for local businesses to connect with their local customer base.
 
 ## Solution
 
@@ -17,4 +17,4 @@ By leveraging this application, shopkeepers can extend their reach and increase 
 - **Server-Side Framework:** Ruby on Rails (v7.0.7)
 - **Ruby Version:** 3.2.2
 - **Database:** PostgreSQL
-- **Front-end Framework:** Next.js
+- **Front-end Framework:** [Next.js](https://github.com/MuhammadZeeshanYousaf/shop-trackee)
